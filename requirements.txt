@@ -1,0 +1,10 @@
+pytest
+yolo5
+opencv-python
+fastapi
+pydantic
+uvicorn
+easyocr
+ultralytics
+httpx
+ruff

@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cv_pom"
+version = "0.1.0"
+authors = [
+  { name = "Álvaro Santos Laserna López", email = "alvaro.laserna@testdevlab.com" },
+  { name = "Arnis Gustins", email = "arnis.gustins@testdevlab.com" },
+]
+description = "CV POM"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+  "Programming Language :: Python :: 3",
+]
+dependencies = [
+  "pytesseract",
+  "yolo5",
+  "opencv-python",
+  "fastapi",
+  "pydantic",
+  "uvicorn",
+  "ultralytics",
+  "easyocr",
+]
+
+[project.urls]
+Homepage = "https://github.com/testdevlab/cv_pom"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.format]
+quote-style = "double"
