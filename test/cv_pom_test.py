@@ -103,7 +103,7 @@ class TestCVPOMUtils(unittest.TestCase):
 
 class TestCVPOMQuery(unittest.TestCase):
     def setUp(self) -> None:
-        self.pom = POM("test/resources/best_august.pt")
+        self.pom = POM("yolov8n.pt")
         # Artificially create elements
         self.pom.elements = create_elements("test/resources/pom_example.json")
 
