@@ -1,0 +1,1172 @@
+[
+    {
+        "id": "0",
+        "label": "paragraph-text",
+        "coords_tl": [
+            698,
+            504
+        ],
+        "coords_br": [
+            1210,
+            564
+        ],
+        "center": [
+            954,
+            534
+        ],
+        "bounding_rect": [
+            698,
+            504,
+            513,
+            61
+        ],
+        "confidence": 0.9063668251037598,
+        "attrs": {
+            "text": "Reach product quality excellence with our software testing\nservices and solutions."
+        }
+    },
+    {
+        "id": "1",
+        "label": "image-btn",
+        "coords_tl": [
+            1366,
+            180
+        ],
+        "coords_br": [
+            1632,
+            248
+        ],
+        "center": [
+            1499,
+            214
+        ],
+        "bounding_rect": [
+            1366,
+            180,
+            267,
+            69
+        ],
+        "confidence": 0.8862500190734863,
+        "attrs": {
+            "text": ""
+        }
+    },
+    {
+        "id": "2",
+        "label": "title-text",
+        "coords_tl": [
+            698,
+            310
+        ],
+        "coords_br": [
+            1189,
+            464
+        ],
+        "center": [
+            943,
+            387
+        ],
+        "bounding_rect": [
+            698,
+            310,
+            492,
+            155
+        ],
+        "confidence": 0.8822275996208191,
+        "attrs": {
+            "text": "Your partner in\n\nSoftware QA"
+        }
+    },
+    {
+        "id": "3",
+        "label": "text-btn",
+        "coords_tl": [
+            1077,
+            620
+        ],
+        "coords_br": [
+            1244,
+            670
+        ],
+        "center": [
+            1160,
+            645
+        ],
+        "bounding_rect": [
+            1077,
+            620,
+            168,
+            51
+        ],
+        "confidence": 0.8683701157569885,
+        "attrs": {
+            "text": ""
+        }
+    },
+    {
+        "id": "4",
+        "label": "text-btn",
+        "coords_tl": [
+            1782,
+            102
+        ],
+        "coords_br": [
+            1920,
+            156
+        ],
+        "center": [
+            1851,
+            129
+        ],
+        "bounding_rect": [
+            1782,
+            102,
+            139,
+            55
+        ],
+        "confidence": 0.866224467754364,
+        "attrs": {
+            "text": ""
+        }
+    },
+    {
+        "id": "5",
+        "label": "text-dropdown-btn",
+        "coords_tl": [
+            1048,
+            117
+        ],
+        "coords_br": [
+            1137,
+            143
+        ],
+        "center": [
+            1092,
+            130
+        ],
+        "bounding_rect": [
+            1048,
+            117,
+            90,
+            27
+        ],
+        "confidence": 0.8627076148986816,
+        "attrs": {
+            "text": "Services ~"
+        }
+    },
+    {
+        "id": "6",
+        "label": "title-text",
+        "coords_tl": [
+            909,
+            1162
+        ],
+        "coords_br": [
+            1628,
+            1224
+        ],
+        "center": [
+            1268,
+            1193
+        ],
+        "bounding_rect": [
+            909,
+            1162,
+            720,
+            63
+        ],
+        "confidence": 0.8429235816001892,
+        "attrs": {
+            "text": "A broad spectrum of solutions"
+        }
+    },
+    {
+        "id": "7",
+        "label": "title-text",
+        "coords_tl": [
+            1190,
+            1110
+        ],
+        "coords_br": [
+            1348,
+            1134
+        ],
+        "center": [
+            1269,
+            1122
+        ],
+        "bounding_rect": [
+            1190,
+            1110,
+            159,
+            25
+        ],
+        "confidence": 0.8331685662269592,
+        "attrs": {
+            "text": "OUR EXPERTISE"
+        }
+    },
+    {
+        "id": "8",
+        "label": "paragraph-text",
+        "coords_tl": [
+            865,
+            1251
+        ],
+        "coords_br": [
+            1666,
+            1310
+        ],
+        "center": [
+            1265,
+            1280
+        ],
+        "bounding_rect": [
+            865,
+            1251,
+            802,
+            60
+        ],
+        "confidence": 0.8313694000244141,
+        "attrs": {
+            "text": "From simple software testing methods to complex testing solutions, we offer a wide range of\nsoftware testing services. Whatever your software QA needs may be\u2014we have the solution."
+        }
+    },
+    {
+        "id": "9",
+        "label": "text-btn",
+        "coords_tl": [
+            1169,
+            116
+        ],
+        "coords_br": [
+            1261,
+            143
+        ],
+        "center": [
+            1215,
+            129
+        ],
+        "bounding_rect": [
+            1169,
+            116,
+            93,
+            28
+        ],
+        "confidence": 0.8222707509994507,
+        "attrs": {
+            "text": "Approach"
+        }
+    },
+    {
+        "id": "10",
+        "label": "text-btn",
+        "coords_tl": [
+            1424,
+            115
+        ],
+        "coords_br": [
+            1499,
+            143
+        ],
+        "center": [
+            1461,
+            129
+        ],
+        "bounding_rect": [
+            1424,
+            115,
+            76,
+            29
+        ],
+        "confidence": 0.8123021721839905,
+        "attrs": {
+            "text": "Careers"
+        }
+    },
+    {
+        "id": "11",
+        "label": "text-btn",
+        "coords_tl": [
+            1555,
+            895
+        ],
+        "coords_br": [
+            1662,
+            931
+        ],
+        "center": [
+            1608,
+            913
+        ],
+        "bounding_rect": [
+            1555,
+            895,
+            108,
+            37
+        ],
+        "confidence": 0.8069664239883423,
+        "attrs": {
+            "text": "@twilio"
+        }
+    },
+    {
+        "id": "12",
+        "label": "icon",
+        "coords_tl": [
+            1008,
+            894
+        ],
+        "coords_br": [
+            1058,
+            936
+        ],
+        "center": [
+            1033,
+            915
+        ],
+        "bounding_rect": [
+            1008,
+            894,
+            51,
+            43
+        ],
+        "confidence": 0.785756528377533,
+        "attrs": {
+            "text": ""
+        }
+    },
+    {
+        "id": "13",
+        "label": "text-btn",
+        "coords_tl": [
+            1746,
+            893
+        ],
+        "coords_br": [
+            1921,
+            932
+        ],
+        "center": [
+            1833,
+            912
+        ],
+        "bounding_rect": [
+            1746,
+            893,
+            176,
+            40
+        ],
+        "confidence": 0.7769728899002075,
+        "attrs": {
+            "text": "W) WorldRemit"
+        }
+    },
+    {
+        "id": "14",
+        "label": "sticky-header",
+        "coords_tl": [
+            64,
+            860
+        ],
+        "coords_br": [
+            2555,
+            961
+        ],
+        "center": [
+            1309,
+            910
+        ],
+        "bounding_rect": [
+            64,
+            860,
+            2492,
+            102
+        ],
+        "confidence": 0.7763020992279053,
+        "attrs": {
+            "text": "@ pDiscora (p) zoom BE Microsoft \u00aetwilio Ww) WorldRemit"
+        }
+    },
+    {
+        "id": "15",
+        "label": "text-dropdown-btn",
+        "coords_tl": [
+            1291,
+            116
+        ],
+        "coords_br": [
+            1391,
+            144
+        ],
+        "center": [
+            1341,
+            130
+        ],
+        "bounding_rect": [
+            1291,
+            116,
+            101,
+            29
+        ],
+        "confidence": 0.7425273656845093,
+        "attrs": {
+            "text": "Company +"
+        }
+    },
+    {
+        "id": "16",
+        "label": "header",
+        "coords_tl": [
+            0,
+            65
+        ],
+        "coords_br": [
+            2535,
+            184
+        ],
+        "center": [
+            1267,
+            124
+        ],
+        "bounding_rect": [
+            0,
+            65,
+            2536,
+            120
+        ],
+        "confidence": 0.6745564937591553,
+        "attrs": {
+            "text": "2) TestDevLab Services + Approach Company + Careers EN ~ Ea"
+        }
+    },
+    {
+        "id": "17",
+        "label": "logo-btn",
+        "coords_tl": [
+            625,
+            106
+        ],
+        "coords_br": [
+            823,
+            152
+        ],
+        "center": [
+            724,
+            129
+        ],
+        "bounding_rect": [
+            625,
+            106,
+            199,
+            47
+        ],
+        "confidence": 0.6292527914047241,
+        "attrs": {
+            "text": "42) TestDevLab"
+        }
+    },
+    {
+        "id": "18",
+        "label": "icon",
+        "coords_tl": [
+            699,
+            700
+        ],
+        "coords_br": [
+            729,
+            729
+        ],
+        "center": [
+            714,
+            714
+        ],
+        "bounding_rect": [
+            699,
+            700,
+            31,
+            30
+        ],
+        "confidence": 0.5501295328140259,
+        "attrs": {
+            "text": ""
+        }
+    },
+    {
+        "id": "19",
+        "label": "text-btn",
+        "coords_tl": [
+            706,
+            624
+        ],
+        "coords_br": [
+            898,
+            664
+        ],
+        "center": [
+            802,
+            644
+        ],
+        "bounding_rect": [
+            706,
+            624,
+            193,
+            41
+        ],
+        "confidence": 0.5318077206611633,
+        "attrs": {
+            "text": "Your business e-mail"
+        }
+    },
+    {
+        "id": "20",
+        "label": "text-btn",
+        "coords_tl": [
+            1147,
+            897
+        ],
+        "coords_br": [
+            1243,
+            929
+        ],
+        "center": [
+            1195,
+            913
+        ],
+        "bounding_rect": [
+            1147,
+            897,
+            97,
+            33
+        ],
+        "confidence": 0.5203949809074402,
+        "attrs": {
+            "text": "zoom"
+        }
+    },
+    {
+        "id": "21",
+        "label": "image-btn",
+        "coords_tl": [
+            1317,
+            526
+        ],
+        "coords_br": [
+            1636,
+            738
+        ],
+        "center": [
+            1476,
+            632
+        ],
+        "bounding_rect": [
+            1317,
+            526,
+            320,
+            213
+        ],
+        "confidence": 0.5027742981910706,
+        "attrs": {
+            "text": "Bu\nUU\u201c F\n"
+        }
+    },
+    {
+        "id": "22",
+        "label": "icon-btn",
+        "coords_tl": [
+            331,
+            9
+        ],
+        "coords_br": [
+            362,
+            36
+        ],
+        "center": [
+            346,
+            22
+        ],
+        "bounding_rect": [
+            331,
+            9,
+            32,
+            28
+        ],
+        "confidence": 0.486737996339798,
+        "attrs": {
+            "text": ""
+        }
+    },
+    {
+        "id": "23",
+        "label": "icon",
+        "coords_tl": [
+            624,
+            886
+        ],
+        "coords_br": [
+            682,
+            941
+        ],
+        "center": [
+            653,
+            913
+        ],
+        "bounding_rect": [
+            624,
+            886,
+            59,
+            56
+        ],
+        "confidence": 0.46795007586479187,
+        "attrs": {
+            "text": ""
+        }
+    },
+    {
+        "id": "24",
+        "label": "text-btn",
+        "coords_tl": [
+            2466,
+            42
+        ],
+        "coords_br": [
+            2556,
+            75
+        ],
+        "center": [
+            2511,
+            58
+        ],
+        "bounding_rect": [
+            2466,
+            42,
+            91,
+            34
+        ],
+        "confidence": 0.45237359404563904,
+        "attrs": {
+            "text": "Update"
+        }
+    },
+    {
+        "id": "25",
+        "label": "text-btn",
+        "coords_tl": [
+            1632,
+            11
+        ],
+        "coords_br": [
+            1678,
+            36
+        ],
+        "center": [
+            1655,
+            23
+        ],
+        "bounding_rect": [
+            1632,
+            11,
+            47,
+            26
+        ],
+        "confidence": 0.4372416138648987,
+        "attrs": {
+            "text": "@ He"
+        }
+    },
+    {
+        "id": "26",
+        "label": "image-btn",
+        "coords_tl": [
+            1657,
+            431
+        ],
+        "coords_br": [
+            1885,
+            859
+        ],
+        "center": [
+            1771,
+            645
+        ],
+        "bounding_rect": [
+            1657,
+            431,
+            229,
+            429
+        ],
+        "confidence": 0.4346082806587219,
+        "attrs": {
+            "text": ""
+        }
+    },
+    {
+        "id": "27",
+        "label": "text-btn",
+        "coords_tl": [
+            1279,
+            9
+        ],
+        "coords_br": [
+            1357,
+            37
+        ],
+        "center": [
+            1318,
+            23
+        ],
+        "bounding_rect": [
+            1279,
+            9,
+            79,
+            29
+        ],
+        "confidence": 0.4220162630081177,
+        "attrs": {
+            "text": "Vic | FE"
+        }
+    },
+    {
+        "id": "28",
+        "label": "text-btn",
+        "coords_tl": [
+            542,
+            8
+        ],
+        "coords_br": [
+            658,
+            37
+        ],
+        "center": [
+            600,
+            22
+        ],
+        "bounding_rect": [
+            542,
+            8,
+            117,
+            30
+        ],
+        "confidence": 0.4197111129760742,
+        "attrs": {
+            "text": "| co bu | \u00a9 tor |"
+        }
+    },
+    {
+        "id": "29",
+        "label": "image-btn",
+        "coords_tl": [
+            1659,
+            241
+        ],
+        "coords_br": [
+            1884,
+            653
+        ],
+        "center": [
+            1771,
+            447
+        ],
+        "bounding_rect": [
+            1659,
+            241,
+            226,
+            413
+        ],
+        "confidence": 0.4177616536617279,
+        "attrs": {
+            "text": ""
+        }
+    },
+    {
+        "id": "30",
+        "label": "popup",
+        "coords_tl": [
+            5,
+            0
+        ],
+        "coords_br": [
+            2516,
+            61
+        ],
+        "center": [
+            1260,
+            30
+        ],
+        "bounding_rect": [
+            5,
+            0,
+            2512,
+            62
+        ],
+        "confidence": 0.41727301478385925,
+        "attrs": {
+            "text": "\u00a9 08 | GAN | ED ve | G20 [\u00a9 ter] AP | EY RE |G tir | ED vi |e Bu | co bu | & tor | Ey te | GR AV| dw | al te: | Ge] A CL] MD AL| W do |b AV vi] G Pe | 58 vil MD FE | EO\n\ngana oy ms de\n\nco |) un| ER Hi | 2 py |@ He |B Te | O ce] fF O00 m|O tc|O | Qci| yo| 2 v|Yn|Ate |e /Om x +\n\nnm ant &\n"
+        }
+    },
+    {
+        "id": "31",
+        "label": "text-btn",
+        "coords_tl": [
+            107,
+            46
+        ],
+        "coords_br": [
+            311,
+            71
+        ],
+        "center": [
+            209,
+            58
+        ],
+        "bounding_rect": [
+            107,
+            46,
+            205,
+            26
+        ],
+        "confidence": 0.4010624587535858,
+        "attrs": {
+            "text": "@ testdeviab.com/?utm=I2"
+        }
+    },
+    {
+        "id": "32",
+        "label": "logo",
+        "coords_tl": [
+            776,
+            895
+        ],
+        "coords_br": [
+            922,
+            931
+        ],
+        "center": [
+            849,
+            913
+        ],
+        "bounding_rect": [
+            776,
+            895,
+            147,
+            37
+        ],
+        "confidence": 0.380497545003891,
+        "attrs": {
+            "text": "@ Discora"
+        }
+    },
+    {
+        "id": "33",
+        "label": "text-btn",
+        "coords_tl": [
+            1680,
+            10
+        ],
+        "coords_br": [
+            1717,
+            36
+        ],
+        "center": [
+            1698,
+            23
+        ],
+        "bounding_rect": [
+            1680,
+            10,
+            38,
+            27
+        ],
+        "confidence": 0.34873369336128235,
+        "attrs": {
+            "text": ""
+        }
+    },
+    {
+        "id": "34",
+        "label": "icon-btn",
+        "coords_tl": [
+            339,
+            9
+        ],
+        "coords_br": [
+            380,
+            37
+        ],
+        "center": [
+            359,
+            23
+        ],
+        "bounding_rect": [
+            339,
+            9,
+            42,
+            29
+        ],
+        "confidence": 0.32186159491539,
+        "attrs": {
+            "text": ""
+        }
+    },
+    {
+        "id": "35",
+        "label": "image-btn",
+        "coords_tl": [
+            1658,
+            182
+        ],
+        "coords_br": [
+            1886,
+            439
+        ],
+        "center": [
+            1772,
+            310
+        ],
+        "bounding_rect": [
+            1658,
+            182,
+            229,
+            258
+        ],
+        "confidence": 0.31505662202835083,
+        "attrs": {
+            "text": ""
+        }
+    },
+    {
+        "id": "36",
+        "label": "text-btn",
+        "coords_tl": [
+            1503,
+            446
+        ],
+        "coords_br": [
+            1606,
+            476
+        ],
+        "center": [
+            1554,
+            461
+        ],
+        "bounding_rect": [
+            1503,
+            446,
+            104,
+            31
+        ],
+        "confidence": 0.31403762102127075,
+        "attrs": {
+            "text": "@ piscora"
+        }
+    },
+    {
+        "id": "37",
+        "label": "paragraph-text",
+        "coords_tl": [
+            908,
+            701
+        ],
+        "coords_br": [
+            1038,
+            728
+        ],
+        "center": [
+            973,
+            714
+        ],
+        "bounding_rect": [
+            908,
+            701,
+            131,
+            28
+        ],
+        "confidence": 0.3120209872722626,
+        "attrs": {
+            "text": "Commitment free"
+        }
+    },
+    {
+        "id": "38",
+        "label": "text-btn",
+        "coords_tl": [
+            1331,
+            894
+        ],
+        "coords_br": [
+            1463,
+            928
+        ],
+        "center": [
+            1397,
+            911
+        ],
+        "bounding_rect": [
+            1331,
+            894,
+            133,
+            35
+        ],
+        "confidence": 0.3079282343387604,
+        "attrs": {
+            "text": "\u00a7E Microsoft\n"
+        }
+    },
+    {
+        "id": "39",
+        "label": "image-btn",
+        "coords_tl": [
+            1322,
+            525
+        ],
+        "coords_br": [
+            1635,
+            825
+        ],
+        "center": [
+            1478,
+            675
+        ],
+        "bounding_rect": [
+            1322,
+            525,
+            314,
+            301
+        ],
+        "confidence": 0.27058589458465576,
+        "attrs": {
+            "text": ""
+        }
+    },
+    {
+        "id": "40",
+        "label": "paragraph-text",
+        "coords_tl": [
+            1782,
+            7
+        ],
+        "coords_br": [
+            2323,
+            38
+        ],
+        "center": [
+            2052,
+            22
+        ],
+        "bounding_rect": [
+            1782,
+            7,
+            542,
+            32
+        ],
+        "confidence": 0.262796550989151,
+        "attrs": {
+            "text": "[Go| com | O ta|Q wi|Qci| yo] 2 vy | Pv | El te | Ed te"
+        }
+    },
+    {
+        "id": "41",
+        "label": "paragraph-text",
+        "coords_tl": [
+            7,
+            7
+        ],
+        "coords_br": [
+            329,
+            38
+        ],
+        "center": [
+            168,
+            22
+        ],
+        "bounding_rect": [
+            7,
+            7,
+            323,
+            32
+        ],
+        "confidence": 0.25797149538993835,
+        "attrs": {
+            "text": "\u00a9 08 | BB AN | Gi Wve | fe 20 | \u00a9 ter | @ AP"
+        }
+    },
+    {
+        "id": "42",
+        "label": "icon-btn",
+        "coords_tl": [
+            433,
+            10
+        ],
+        "coords_br": [
+            481,
+            36
+        ],
+        "center": [
+            457,
+            23
+        ],
+        "bounding_rect": [
+            433,
+            10,
+            49,
+            27
+        ],
+        "confidence": 0.2560895085334778,
+        "attrs": {
+            "text": "|v"
+        }
+    },
+    {
+        "id": "43",
+        "label": "text-btn",
+        "coords_tl": [
+            1407,
+            8
+        ],
+        "coords_br": [
+            1512,
+            36
+        ],
+        "center": [
+            1459,
+            22
+        ],
+        "bounding_rect": [
+            1407,
+            8,
+            106,
+            29
+        ],
+        "confidence": 0.2549813687801361,
+        "attrs": {
+            "text": "Oc|O ur"
+        }
+    },
+    {
+        "id": "44",
+        "label": "text-btn",
+        "coords_tl": [
+            2071,
+            7
+        ],
+        "coords_br": [
+            2168,
+            38
+        ],
+        "center": [
+            2119,
+            22
+        ],
+        "bounding_rect": [
+            2071,
+            7,
+            98,
+            32
+        ],
+        "confidence": 0.25260305404663086,
+        "attrs": {
+            "text": "yo | \u00a9 py"
+        }
+    }
+]
