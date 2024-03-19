@@ -60,21 +60,63 @@ class POM:
         Returns:
             POM: self
         """
-        results: list[Results] = self.model.predict(source, verbose=False)
-
         self.elements = []
         self.annotated_frame = None
-        ref_element_txt = []
 
+        #  Object detection
+        self.elements = self._object_detection(source)
+
+        # Optical character recognition
         if use_ocr:
+            ref_elements_txt = []  # [([Coordinates], Text)]
             output_txts = self._reader.readtext(image=source, batch_size=3, canvas_size=1200, paragraph=True)
             for output_txt in output_txts:
                 coordinates = [output_txt[0][0][0], output_txt[0][0][1], output_txt[0][2][0], output_txt[0][2][1]]
-                ref_element_txt.append([[int(x) for x in coordinates], output_txt[1]])
+                ref_elements_txt.append([[int(x) for x in coordinates], output_txt[1]])
+            # overlapping
+            for i in range(len(self.elements)):
+                output_overlap = self._find_overlapping_rects([
+                    self.elements[i].coords_tl[0],
+                    self.elements[i].coords_tl[1],
+                    self.elements[i].coords_br[0],
+                    self.elements[i].coords_br[1]], ref_elements_txt)
+                final_text = ''
+                for output_txt in output_overlap:
+                    final_text += output_txt[1] + ' '
+                self.elements[i].attrs['text'] = final_text[:-1]
+            # non - overlapping
+            ocr_elements = self._find_non_overlapping_rects(self.elements, ref_elements_txt)
+            for ocr_element in ocr_elements:
+                id_n = len(self.elements)
+                ocr_element.id = str(id_n)
+                self.annotated_frame = cv.rectangle(
+                    self.annotated_frame,
+                    pt1=ocr_element.coords_br,
+                    pt2=ocr_element.coords_tl,
+                    color=(0, 255, 0),
+                    thickness=3,
+                )
+                x, y = ocr_element.coords_tl
+                cv.putText(
+                    self.annotated_frame, 'ocr_element', (x, y - 10), cv.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 3
+                )
+                self.elements.append(ocr_element)
+
+        return self
+
+    def _object_detection(self, source) -> list[POMElement]:
+        """Retrieves all the elements using Object Detection ML Algorithm.
+        Args:
+            source: Image
+        Returns:
+            list[POMElement]: List of elements
+        """
+        elements: list[POMElement] = []
+
+        results: list[Results] = self.model.predict(source, verbose=False)
 
         for result in results:
             self.annotated_frame = result.plot()
-
             for i in range(len(result.boxes.data.tolist())):
                 data = result.boxes.data.tolist()[i]
                 xmin, ymin, xmax, ymax, confidence, class_id = data
@@ -95,35 +137,9 @@ class POM:
                     attrs={},
                 )
 
-                # Get text out of image
-                if use_ocr:
-                    output_overlap = self._find_overlapping_rects([tl[0], tl[1], br[0], br[1]], ref_element_txt)
-                    final_text = ''
-                    for output_txt in output_overlap:
-                        final_text += output_txt[1] + ' '
-                    element.attrs['text'] = final_text[:-1]
+                elements.append(element)
 
-                self.elements.append(element)
-
-        if use_ocr:
-            ocr_elements = self._find_non_overlapping_rects(self.elements, ref_element_txt)
-            for ocr_element in ocr_elements:
-                id_n = len(self.elements)
-                ocr_element.id = str(id_n)
-                self.annotated_frame = cv.rectangle(
-                    self.annotated_frame,
-                    pt1=ocr_element.coords_br,
-                    pt2=ocr_element.coords_tl,
-                    color=(0, 255, 0),
-                    thickness=3,
-                )
-                x, y = ocr_element.coords_tl
-                cv.putText(
-                    self.annotated_frame, 'ocr_element', (x, y - 10), cv.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 3
-                )
-                self.elements.append(ocr_element)
-
-        return self
+        return elements
 
     def get_elements(self, query_dict: dict | None = None) -> list[POMElement]:
         """Get elements using a query.
