@@ -16,7 +16,7 @@ app.cv_pom = None
 
 class ConvertBody(BaseModel):
     image_base64: str
-    ocr: bool
+    ocr: dict
     query: dict
 
 
