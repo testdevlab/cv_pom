@@ -29,8 +29,8 @@ from cv_pom.cv_pom_driver import CVPOMDriver
 
 
 class MyCVPOMDriver(CVPOMDriver):
-    def __init__(self, model_path: str | Path, your_driver) -> None:
-        super().__init__(model_path)
+    def __init__(self, model_path: str | Path, your_driver, **kwargs) -> None:
+        super().__init__(model_path, **kwargs)
         self._driver = your_driver  # Store your driver so that you can use it later
 
     def _get_screenshot(self) -> ndarray:
@@ -44,7 +44,8 @@ Then use it for automation
 ```python
 framework_specific_driver = ... # Driver object you create with your automation framework of choice
 model_path = "./my-model.pt"
-cv_pom_driver = MyCVPOMDriver(model_path, framework_specific_driver)
+kwargs = {'ocr': {'paragraph': True}} # Optional
+cv_pom_driver = MyCVPOMDriver(model_path, framework_specific_driver, **kwargs)
 
 # Find element by label
 element = cv_pom_driver.find_element({"label": "reply-main"})
@@ -63,6 +64,8 @@ cv_pom_driver.find_element({"label": "reply-main"}).swipe(el=cv_pom_driver.find_
 # Swipe/Scroll by direction "up", "down", "left" and "right"
 cv_pom_driver.find_element({"label": "reply-main"}).swipe(direction="down")
 ```
+For now, the kwargs in `MyCVPOMDriver` is only used for `ocr` and the values are any parameters that EasyOCR allows under `self._reader.readtext(**ocr_props_comb)` check [here](https://www.jaided.ai/easyocr/documentation/)
+
 
 For more info about the query syntax, look into the documentation of `POM.get_elements()` method (`cv_sdk/cv_pom.py`).
 

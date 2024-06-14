@@ -31,7 +31,8 @@ def parse_args():
 if __name__ == "__main__":
     args = parse_args()
     cv_pom = POM(args.model)
-    cv_pom.convert_to_cvpom(args.media, True)
+    ocr_props_comb = {'paragraph': False}
+    cv_pom.convert_to_cvpom(args.media, ocr_props_comb)
 
     if len(cv_pom.get_elements()) == 0:
         print(f"No object was found in the image: {args.media}")

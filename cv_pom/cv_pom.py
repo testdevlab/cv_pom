@@ -50,12 +50,12 @@ class POM:
         self.annotated_frame: np.ndarray = None
         self._reader = easyocr.Reader(['en'])
 
-    def convert_to_cvpom(self, source, use_ocr=False):
+    def convert_to_cvpom(self, source, ocr_props=None):
         """Convert image to CV POM.
 
         Args:
             source: Image source, supports same data types as YOLO "predict" method
-            use_ocr: Enable OCR to read text. Defaults to False.
+            ocr_props: properties for OCR to read text. Defaults to None.
 
         Returns:
             POM: self
@@ -67,9 +67,12 @@ class POM:
         self.elements = self._object_detection(source)
 
         # Optical character recognition
-        if use_ocr:
+        if ocr_props:
+            ocr_props_comb = {'image': source, 'batch_size': 3, 'canvas_size': 1200, 'paragraph': False}
+            for prop in ocr_props:
+                ocr_props_comb[prop] = ocr_props[prop]
             ref_elements_txt = []  # [([Coordinates], Text)]
-            output_txts = self._reader.readtext(image=source, batch_size=3, canvas_size=1200, paragraph=True)
+            output_txts = self._reader.readtext(**ocr_props_comb)
             for output_txt in output_txts:
                 coordinates = [output_txt[0][0][0], output_txt[0][0][1], output_txt[0][2][0], output_txt[0][2][1]]
                 ref_elements_txt.append([[int(x) for x in coordinates], output_txt[1]])

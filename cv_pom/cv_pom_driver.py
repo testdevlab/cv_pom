@@ -130,9 +130,10 @@ class CVPOMDriverElement(POMElement):
 
 
 class CVPOMPageDriver:
-    def __init__(self, pom: POM, driver: "CVPOMDriver") -> None:
+    def __init__(self, pom: POM, driver: "CVPOMDriver", **kwargs) -> None:
         self._pom = pom
         self._driver = driver
+        self.kwargs = kwargs
 
     def element(self, query: dict) -> CVPOMDriverElement:
         elements = self._pom.get_elements(query)
@@ -152,8 +153,9 @@ class CVPOMPageDriver:
 class CVPOMDriver(ABC):
     """Driver class used to find elements in the POM"""
 
-    def __init__(self, model_path: Path | str) -> None:
+    def __init__(self, model_path: Path | str, **kwargs) -> None:
         self._pom = POM(model_path)
+        self.kwargs = kwargs
 
     def element(self, query: dict) -> CVPOMDriverElement:
         """Get a single element.
@@ -168,7 +170,11 @@ class CVPOMDriver(ABC):
         Returns:
             CVPOMDriverElement
         """
-        ocr = "text" in query
+        ocr = None
+        if "text" in query:
+            ocr = {'paragraph': False}
+            if self.kwargs and self.kwargs['ocr']:
+                ocr = self.kwargs['ocr']
         pom = self._pom.convert_to_cvpom(self._get_screenshot(), ocr)
 
         return CVPOMPageDriver(pom, self).element(query)
@@ -182,7 +188,11 @@ class CVPOMDriver(ABC):
         Returns:
             list[CVPOMDriverElement]: List of elements
         """
-        ocr = ("text" in query or "ocr_element" in query)
+        ocr = None
+        if "text" in query or "ocr_element" in query:
+            ocr = {'paragraph': False}
+            if self.kwargs and self.kwargs['ocr']:
+                ocr = self.kwargs['ocr']
         pom = self._pom.convert_to_cvpom(self._get_screenshot(), ocr)
 
         return CVPOMPageDriver(pom, self).elements(query)
@@ -195,7 +205,10 @@ class CVPOMDriver(ABC):
         Returns:
             POM: full CV_POM
         """
-        pom = self._pom.convert_to_cvpom(self._get_screenshot(), True)
+        if self.kwargs:
+            pom = self._pom.convert_to_cvpom(self._get_screenshot(), self.kwargs['ocr'])
+        else:
+            pom = self._pom.convert_to_cvpom(self._get_screenshot())
 
         return CVPOMPageDriver(pom, self)
 

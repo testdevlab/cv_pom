@@ -15,13 +15,13 @@ class TestCVPOMConvert(unittest.TestCase):
         self.image_path = "test/resources/yolo_test_1.png"
 
     def test_image_path_to_pom(self):
-        self.pom.convert_to_cvpom(self.image_path, True)
+        self.pom.convert_to_cvpom(self.image_path, {'paragraph': False})
         elements = self.pom.get_elements()
 
         self.assertTrue(len(elements) > 0)
 
     def test_image_to_pom(self):
-        self.pom.convert_to_cvpom(self.image_path, False)
+        self.pom.convert_to_cvpom(self.image_path, {'paragraph': False})
         elements = self.pom.get_elements()
 
         self.assertTrue(len(elements) > 0)
@@ -172,10 +172,11 @@ class TestCVPOMServer(unittest.TestCase):
 
         response = client.post(
             "/convert_to_cvpom",
-            json={"image_base64": data, "ocr": True, "query": {"label": "ocr_element"}},
+            json={"image_base64": data, "ocr": {'paragraph': False}, "query": {"label": "ocr_element"}},
         )
 
         response_data = response.json()
+        print(response_data)
         self.assertTrue(len(response_data) > 0, f"the response data was: {response_data}")
         for el in response_data:
             self.assertEqual(el["label"], "ocr_element")

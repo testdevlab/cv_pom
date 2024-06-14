@@ -18,14 +18,14 @@ except ImportError:
 class TestUICVPOMDriver(CVPOMDriver):
     """CVPOMDriver adapted for Py-TestUI framework"""
 
-    def __init__(self, model_path: Path | str, driver) -> None:
+    def __init__(self, model_path: Path | str, driver, **kwargs) -> None:
         """Initialize the driver
 
         Args:
             model_path: path to the CVPOM model
             driver: path to the TestUIDriver
         """
-        super().__init__(model_path)
+        super().__init__(model_path, **kwargs)
         self._driver = driver
 
     def _get_screenshot(self) -> ndarray:
