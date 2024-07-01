@@ -11,7 +11,7 @@ empty_pom_element = POMElement("", "", (0, 0), (0, 0), (0, 0), (0, 0, 0, 0), 0, 
 
 
 class CVPOMDriverElement(POMElement):
-    """This class extends POMElement by adding methods for interractions"""
+    """This class extends POMElement by adding methods for interactions"""
 
     def __init__(self, element: POMElement, query: dict, driver: "CVPOMDriver") -> None:
         super().__init__(**element.as_dict())  # Init POMElement part (parent class)
@@ -29,11 +29,11 @@ class CVPOMDriverElement(POMElement):
         Returns:
             CVPOMDriverElement
         """
-        el = self.wait_visible(timeout)
+        self.wait_visible(timeout)
         x, y = self.center
-        el._driver._click_coordinates(x, y)
+        self._driver._click_coordinates(x, y)
 
-        return el
+        return self
 
     def wait_visible(self, timeout=10) -> CVPOMDriverElement:
         """Wait until element is visible
@@ -44,14 +44,16 @@ class CVPOMDriverElement(POMElement):
         Returns:
             CVPOMDriverElement
         """
-        elements: list[CVPOMDriverElement] = self._driver.wait_until(
-            lambda: self._driver.elements(self._query),
-            lambda els: len(els),
-            f"Element '{self._query}' not found after {timeout}s",
-            timeout
-        )
+        if self.center == (0, 0):
+            elements: list[CVPOMDriverElement] = self._driver.wait_until(
+                lambda: self._driver.elements(self._query),
+                lambda els: len(els),
+                f"Element '{self._query}' not found after {timeout}s",
+                timeout
+            )
+            self.__init__(elements[0], self._query, self._driver)
 
-        return elements[0]
+        return self
 
     def wait_not_visible(self, timeout=10) -> CVPOMDriverElement:
         """Wait until element is not visible
@@ -82,11 +84,10 @@ class CVPOMDriverElement(POMElement):
         Returns:
             CVPOMDriverElement
         """
-        el = self.wait_visible()
-        el.click()  # Focus the input element
-        el._driver._send_keys(keys)
+        self.click()  # Focus the input element
+        self._driver._send_keys(keys)
 
-        return el
+        return self
 
     def swipe(self, offset: tuple = None, el: CVPOMDriverElement = None) -> CVPOMDriverElement:
         """Swipes or scrolls using coordinates, direction or an element.
