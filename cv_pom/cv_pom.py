@@ -1,3 +1,4 @@
+from __future__ import annotations
 import dataclasses
 from dataclasses import dataclass
 import json
@@ -44,13 +45,13 @@ class POM:
     Used to convert image source into POM and then query the elements.
     """
 
-    def __init__(self, model_path: str | Path):
+    def __init__(self, model_path: str | Path) -> None:
         self.model = YOLO(model_path)
         self.elements: list[POMElement] = []
         self.annotated_frame: np.ndarray = None
         self._reader = easyocr.Reader(['en'])
 
-    def convert_to_cvpom(self, source, ocr_props=None):
+    def convert_to_cvpom(self, source, ocr_props=None) -> POM:
         """Convert image to CV POM.
 
         Args:
@@ -172,6 +173,9 @@ class POM:
         for element in self.elements:
             label = element.label
             if not self._check_query_value(label, query.label):
+                continue
+
+            if query.text is not None and "text" not in element.attrs:
                 continue
 
             if "text" in element.attrs:
