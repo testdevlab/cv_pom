@@ -1,4 +1,5 @@
 import base64
+import inspect
 from io import BytesIO
 from pathlib import Path
 from numpy import ndarray
@@ -6,6 +7,7 @@ import cv2 as cv
 from cv_pom.cv_pom_driver import CVPOMDriver
 from PIL import Image
 import numpy as np
+
 try:
     from testui.support.logger import log_info
     from selenium.webdriver.common.actions.action_builder import ActionBuilder
@@ -29,15 +31,21 @@ class TestUICVPOMDriver(CVPOMDriver):
         self._driver = driver
 
     def _get_screenshot(self) -> ndarray:
-        image = self._driver.get_driver.get_screenshot_as_base64()
+        driver = self._driver.get_driver  # Deprecated property 1.2.1 python-testui
+        if inspect.ismethod(self._driver.get_driver):
+            driver = self._driver.get_driver()
+        image = driver.get_screenshot_as_base64()
         sbuf = BytesIO()
         sbuf.write(base64.b64decode(str(image)))
         pimg = Image.open(sbuf)
         return cv.cvtColor(np.array(pimg), cv.COLOR_RGB2BGR)
 
     def _click_coordinates(self, x: int, y: int):
+        driver = self._driver.get_driver  # Deprecated property 1.2.1 python-testui
+        if inspect.ismethod(self._driver.get_driver):
+            driver = self._driver.get_driver()
         self._driver.actions().w3c_actions = ActionBuilder(
-            self._driver.get_driver,
+            driver,
             mouse=PointerInput(interaction.POINTER_TOUCH, "touch"),
         )
 
