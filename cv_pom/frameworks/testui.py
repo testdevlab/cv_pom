@@ -7,6 +7,7 @@ import cv2 as cv
 from cv_pom.cv_pom_driver import CVPOMDriver
 from PIL import Image
 import numpy as np
+
 try:
     from testui.support.logger import log_info
     from selenium.webdriver.common.actions.action_builder import ActionBuilder
@@ -30,7 +31,7 @@ class TestUICVPOMDriver(CVPOMDriver):
         self._driver = driver
 
     def _get_screenshot(self) -> ndarray:
-        driver = self._driver.get_driver
+        driver = self._driver.get_driver  # Deprecated property 1.2.1 python-testui
         if inspect.ismethod(self._driver.get_driver):
             driver = self._driver.get_driver()
         image = driver.get_screenshot_as_base64()
@@ -40,7 +41,7 @@ class TestUICVPOMDriver(CVPOMDriver):
         return cv.cvtColor(np.array(pimg), cv.COLOR_RGB2BGR)
 
     def _click_coordinates(self, x: int, y: int):
-        driver = self._driver.get_driver
+        driver = self._driver.get_driver  # Deprecated property 1.2.1 python-testui
         if inspect.ismethod(self._driver.get_driver):
             driver = self._driver.get_driver()
         self._driver.actions().w3c_actions = ActionBuilder(
