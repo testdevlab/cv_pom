@@ -18,7 +18,7 @@ class CVPOMDriverElement(POMElement):
         self._query = query
         self._driver = driver
 
-    def click(self, timeout=10) -> CVPOMDriverElement:
+    def click(self, timeout=10, offset=(0, 0)) -> CVPOMDriverElement:
         """Click in the center of an element.
 
         Will wait for element to be visible first.
@@ -28,10 +28,12 @@ class CVPOMDriverElement(POMElement):
 
         Returns:
             CVPOMDriverElement
+            :param offset: Offset from the coordinates of the element (AX, AY)
         """
         self.wait_visible(timeout)
         x, y = self.center
-        self._driver._click_coordinates(x, y)
+        ax, ay = offset
+        self._driver._click_coordinates(x + ax, y + ay)
 
         return self
 
@@ -73,7 +75,7 @@ class CVPOMDriverElement(POMElement):
 
         return self
 
-    def send_keys(self, keys: str) -> CVPOMDriverElement:
+    def send_keys(self, keys: str, offset=(0, 0)) -> CVPOMDriverElement:
         """Send keys.
 
         Will wait for element to be visible first.
@@ -83,8 +85,10 @@ class CVPOMDriverElement(POMElement):
 
         Returns:
             CVPOMDriverElement
+            :param keys: Text to send to the UI interface
+            :param offset: Offset from the coordinates of the element (AX, AY)
         """
-        self.click()  # Focus the input element
+        self.click(offset=offset)  # Focus the input element
         self._driver._send_keys(keys)
 
         return self
