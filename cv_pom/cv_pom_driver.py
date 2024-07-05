@@ -25,14 +25,14 @@ class CVPOMDriverElement(POMElement):
 
         Args:
             timeout: Max wait time in seconds. Defaults to 10.
+            interval: interval when click times is more than 1
+            button: button to use for clicking
+            timeout: timeout to find the element visible
+            times: defaults to 1, and 2 performs double click for those frameworks that allows it
+            offset: Offset from the coordinates of the element (AX, AY)
 
         Returns:
             CVPOMDriverElement
-            :param interval: interval when click times is more than 1
-            :param button: button to use for clicking
-            :param timeout: timeout to find the element visible
-            :param times: defaults to 1, and 2 performs double click for those frameworks that allows it
-            :param offset: Offset from the coordinates of the element (AX, AY)
         """
         self.wait_visible(timeout)
         x, y = self.center
@@ -86,11 +86,10 @@ class CVPOMDriverElement(POMElement):
 
         Args:
             keys: Key sequence (string) to send
+            offset: Offset from the coordinates of the element (AX, AY)
 
         Returns:
             CVPOMDriverElement
-            :param keys: Text to send to the UI interface
-            :param offset: Offset from the coordinates of the element (AX, AY)
         """
         self.click(offset=offset)  # Focus the input element
         self._driver._send_keys(keys)
