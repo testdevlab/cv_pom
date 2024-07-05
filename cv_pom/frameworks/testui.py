@@ -1,5 +1,6 @@
 import base64
 import inspect
+import time
 from io import BytesIO
 from pathlib import Path
 from numpy import ndarray
@@ -40,7 +41,7 @@ class TestUICVPOMDriver(CVPOMDriver):
         pimg = Image.open(sbuf)
         return cv.cvtColor(np.array(pimg), cv.COLOR_RGB2BGR)
 
-    def _click_coordinates(self, x: int, y: int):
+    def _click_coordinates(self, x: int, y: int, times=1, interval=0, button="PRIMARY"):
         driver = self._driver.get_driver  # Deprecated property 1.2.1 python-testui
         if inspect.ismethod(self._driver.get_driver):
             driver = self._driver.get_driver()
@@ -49,10 +50,12 @@ class TestUICVPOMDriver(CVPOMDriver):
             mouse=PointerInput(interaction.POINTER_TOUCH, "touch"),
         )
 
-        actions = self._driver.actions()
-        actions.w3c_actions.pointer_action.move_to_location(x=x, y=y)
-        actions.w3c_actions.pointer_action.click()
-        actions.perform()
+        for i in range(times):
+            actions = self._driver.actions()
+            actions.w3c_actions.pointer_action.move_to_location(x=x, y=y)
+            actions.w3c_actions.pointer_action.click()
+            actions.perform()
+            time.sleep(interval)
 
     def _send_keys(self, keys: str):
         self._driver.actions().send_keys(keys).perform()

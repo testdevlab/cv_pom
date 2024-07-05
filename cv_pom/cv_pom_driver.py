@@ -18,22 +18,26 @@ class CVPOMDriverElement(POMElement):
         self._query = query
         self._driver = driver
 
-    def click(self, timeout=10, offset=(0, 0)) -> CVPOMDriverElement:
+    def click(self, timeout=10, offset=(0, 0), times=1, interval=0, button="PRIMARY") -> CVPOMDriverElement:
         """Click in the center of an element.
 
         Will wait for element to be visible first.
 
         Args:
             timeout: Max wait time in seconds. Defaults to 10.
+            interval: interval when click times is more than 1
+            button: button to use for clicking
+            timeout: timeout to find the element visible
+            times: defaults to 1, and 2 performs double click for those frameworks that allows it
+            offset: Offset from the coordinates of the element (AX, AY)
 
         Returns:
             CVPOMDriverElement
-            :param offset: Offset from the coordinates of the element (AX, AY)
         """
         self.wait_visible(timeout)
         x, y = self.center
         ax, ay = offset
-        self._driver._click_coordinates(x + ax, y + ay)
+        self._driver._click_coordinates(x + ax, y + ay, times, interval, button)
 
         return self
 
@@ -82,11 +86,10 @@ class CVPOMDriverElement(POMElement):
 
         Args:
             keys: Key sequence (string) to send
+            offset: Offset from the coordinates of the element (AX, AY)
 
         Returns:
             CVPOMDriverElement
-            :param keys: Text to send to the UI interface
-            :param offset: Offset from the coordinates of the element (AX, AY)
         """
         self.click(offset=offset)  # Focus the input element
         self._driver._send_keys(keys)
@@ -253,7 +256,7 @@ class CVPOMDriver(ABC):
         pass
 
     @abstractmethod
-    def _click_coordinates(self, x: int, y: int):
+    def _click_coordinates(self, x: int, y: int, times=1, interval=0, button="PRIMARY"):
         pass
 
     @abstractmethod

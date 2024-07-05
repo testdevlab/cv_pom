@@ -31,8 +31,8 @@ class DesktopCVPOMDriver(CVPOMDriver):
         pimg = np.array(screenshot)
         return cv.cvtColor(np.array(pimg), cv.COLOR_RGB2BGR)
 
-    def _click_coordinates(self, x: int, y: int):
-        pyautogui.click(x, y)
+    def _click_coordinates(self, x: int, y: int, times=1, interval=0, button="PRIMARY"):
+        pyautogui.click(x=x, y=y, clicks=times, interval=interval, button=button)
 
     def _send_keys(self, keys: str):
         pyautogui.write(keys)
