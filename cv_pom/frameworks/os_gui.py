@@ -3,6 +3,7 @@ from cv_pom.cv_pom_driver import CVPOMDriver
 import numpy as np
 import cv2 as cv
 from PIL import Image
+
 try:
     import pyautogui
 except ImportError:
@@ -51,3 +52,8 @@ class DesktopCVPOMDriver(CVPOMDriver):
 
     def _hover_coordinates(self, x: int, y: int):
         pyautogui.moveTo(x, y)
+
+    def _drag_drop(self, x: int, y: int, x_end: int, y_end: int, duration=0.1):
+        pyautogui.mouseDown(x, y)
+        pyautogui.moveTo(x, y, duration=duration)
+        pyautogui.mouseUp(x_end, y_end)

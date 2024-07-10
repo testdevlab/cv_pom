@@ -3,7 +3,7 @@ import time
 import logging
 import numpy as np
 
-from typing import Callable
+from typing import Callable, Optional, Tuple
 from abc import ABC, abstractmethod
 from pathlib import Path
 from cv_pom.cv_pom import POM, POMElement
@@ -188,6 +188,89 @@ class CVPOMDriverElement(POMElement):
 
         return self
 
+    def drag_drop(self,
+                  end_coords: Optional[Tuple[int, int]] = None,
+                  delta: Optional[Tuple[int, int]] = None,
+                  duration=0.1
+                  ) -> CVPOMDriverElement:
+        """Drag and Drop from an element to coordinates or a delta distance in pixels.
+
+        Will wait for element to be visible.
+
+        Args:
+            offset: Offset from the coordinates of the element (AX, AY)
+            end_coords: coordinates to end (optional)
+            delta: distance in pixels from the element (optional)
+            duration: duration for the action to take place
+
+        Returns:
+            CVPOMDriverElement
+        """
+        if end_coords is None and delta is None:
+            logger.error(
+                f"action: drag_drop - either end_coords or delta must be specified - action not performed"
+            )
+            return self
+
+        if end_coords is None:
+            self.wait_visible()
+            x, y = self.center
+            delta_x, delta_y = delta
+            x_end, y_end = x + delta_x, y + delta_y
+        else:
+            self.wait_visible()
+            x, y = self.center
+            x_end, y_end = end_coords
+
+        logger.info(
+            f"action: drag_drop - start coords: {(x, y)} - end coords: {(x_end, y_end)}"
+        )
+        self._driver._drag_drop(x, y, x_end, y_end, duration)
+
+        return self
+
+    def drag_drop_to(self,
+                     start_coords: Optional[Tuple[int, int]] = None,
+                     delta: Optional[Tuple[int, int]] = None,
+                     duration=0.1
+                     ) -> CVPOMDriverElement:
+        """Drag and Drop from coordinates or a delta distance in pixels to an element.
+
+        Will wait for element to be visible.
+
+        Args:
+            offset: Offset from the coordinates of the element (AX, AY)
+            start_coords: coordinates to start from (optional)
+            delta: distance in pixels from the element (optional)
+            duration: duration for the action to take place
+
+        Returns:
+            CVPOMDriverElement
+        """
+        if start_coords is None and delta is None:
+            logger.error(
+                f"action: drag_drop - either start_coords or delta must be specified - action not performed"
+            )
+            return self
+
+        if start_coords is None:
+            self.wait_visible()
+            x_end, y_end = self.center
+            delta_x, delta_y = delta
+            x, y = x_end + delta_x, y_end + delta_y
+
+        else:
+            self.wait_visible()
+            x_end, y_end = self.center
+            x, y = start_coords
+
+        logger.info(
+            f"action: drag_drop - start coords: {(x, y)} - end coords: {(x_end, y_end)}"
+        )
+        self._driver._drag_drop(x, y, x_end, y_end, duration)
+
+        return self
+
 
 class CVPOMPageDriver:
     def __init__(self, pom: POM, driver: "CVPOMDriver", **kwargs) -> None:
@@ -321,4 +404,8 @@ class CVPOMDriver(ABC):
 
     @abstractmethod
     def _hover_coordinates(self, x: int, y: int):
+        pass
+
+    @abstractmethod
+    def _drag_drop(self, x: int, y: int, x_end: int, y_end: int, duration=0.1):
         pass
