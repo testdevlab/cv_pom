@@ -1,5 +1,6 @@
 from __future__ import annotations
 import time
+import logging
 import numpy as np
 
 from typing import Callable
@@ -8,6 +9,19 @@ from pathlib import Path
 from cv_pom.cv_pom import POM, POMElement
 
 empty_pom_element = POMElement("", "", (0, 0), (0, 0), (0, 0), (0, 0, 0, 0), 0, {})
+
+# create logger
+logger = logging.getLogger('cv_pom logger')
+logger.setLevel(logging.DEBUG)
+# create console handler and set level to debug
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+# create formatter
+formatter = logging.Formatter('[%(asctime)s] - %(levelname)s - %(message)s')
+# add formatter to ch
+ch.setFormatter(formatter)
+# add ch to logger
+logger.addHandler(ch)
 
 
 class CVPOMDriverElement(POMElement):
@@ -27,7 +41,6 @@ class CVPOMDriverElement(POMElement):
             timeout: Max wait time in seconds. Defaults to 10.
             interval: interval when click times is more than 1
             button: button to use for clicking
-            timeout: timeout to find the element visible
             times: defaults to 1, and 2 performs double click for those frameworks that allows it
             offset: Offset from the coordinates of the element (AX, AY)
 
@@ -37,6 +50,9 @@ class CVPOMDriverElement(POMElement):
         self.wait_visible(timeout)
         x, y = self.center
         ax, ay = offset
+        logger.info(
+            f"action: click - element coords: {self.center} - element label: \"{self.label}\" - element attrs: {self.attrs}"
+        )
         self._driver._click_coordinates(x + ax, y + ay, times, interval, button)
 
         return self
@@ -59,6 +75,11 @@ class CVPOMDriverElement(POMElement):
             )
             self.__init__(elements[0], self._query, self._driver)
 
+        logger.info(
+            f"action: wait_visible - element coords: {self.center} - "
+            f"element label: \"{self.label}\" - element attrs: {self.attrs}"
+        )
+
         return self
 
     def wait_not_visible(self, timeout=10) -> CVPOMDriverElement:
@@ -77,6 +98,11 @@ class CVPOMDriverElement(POMElement):
             timeout
         )
 
+        logger.info(
+            f"action: wait_not_visible - element coords: {self.center} - "
+            f"element label: \"{self.label}\" - element attrs: {self.attrs}"
+        )
+
         return self
 
     def send_keys(self, keys: str, offset=(0, 0)) -> CVPOMDriverElement:
@@ -92,6 +118,10 @@ class CVPOMDriverElement(POMElement):
             CVPOMDriverElement
         """
         self.click(offset=offset)  # Focus the input element
+        logger.info(
+            f"action: send_keys - element coords: {self.center} - "
+            f"element label: \"{self.label}\" - element attrs: {self.attrs}"
+        )
         self._driver._send_keys(keys)
 
         return self
@@ -135,6 +165,28 @@ class CVPOMDriverElement(POMElement):
 
         el = self.wait_visible()
         return el
+
+    def hover(self, timeout=10, offset=(0, 0)) -> CVPOMDriverElement:
+        """Hover in the center of an element.
+
+        Will wait for element to be visible first.
+
+        Args:
+            timeout: Max wait time in seconds. Defaults to 10.
+            offset: Offset from the coordinates of the element (AX, AY)
+
+        Returns:
+            CVPOMDriverElement
+        """
+        self.wait_visible(timeout)
+        x, y = self.center
+        ax, ay = offset
+        logger.info(
+            f"action: hover - element coords: {self.center} - element label: {self.label} - element attrs: {self.attrs}"
+        )
+        self._driver._hover_coordinates(x + ax, y + ay)
+
+        return self
 
 
 class CVPOMPageDriver:
@@ -265,4 +317,8 @@ class CVPOMDriver(ABC):
 
     @abstractmethod
     def _swipe_coordinates(self, coords: tuple = None, direction: str = None):
+        pass
+
+    @abstractmethod
+    def _hover_coordinates(self, x: int, y: int):
         pass

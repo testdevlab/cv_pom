@@ -48,3 +48,6 @@ class DesktopCVPOMDriver(CVPOMDriver):
             pyautogui.hscroll(1)
         elif direction == 'right':
             pyautogui.hscroll(-1)
+
+    def _hover_coordinates(self, x: int, y: int):
+        pyautogui.moveTo(x, y)
