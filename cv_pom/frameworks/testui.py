@@ -92,3 +92,16 @@ class TestUICVPOMDriver(CVPOMDriver):
         actions.w3c_actions.pointer_action.move_to_location(x=x_end, y=y_end)
         actions.w3c_actions.pointer_action.release()
         actions.perform()
+
+    def _hover_coordinates(self, x: int, y: int):
+        driver = self._driver.get_driver  # Deprecated property 1.2.1 python-testui
+        if inspect.ismethod(self._driver.get_driver):
+            driver = self._driver.get_driver()
+        self._driver.actions().w3c_actions = ActionBuilder(
+            driver,
+            mouse=PointerInput(interaction.POINTER_TOUCH, "touch"),
+        )
+
+        actions = self._driver.actions()
+        actions.w3c_actions.pointer_action.move_to_location(x=x, y=y)
+        actions.perform()
