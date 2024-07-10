@@ -167,7 +167,7 @@ class CVPOMDriverElement(POMElement):
         return el
 
     def hover(self, timeout=10, offset=(0, 0)) -> CVPOMDriverElement:
-        """Click in the center of an element.
+        """Hover in the center of an element.
 
         Will wait for element to be visible first.
 
