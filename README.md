@@ -131,7 +131,7 @@ def testui_driver():
 
 @pytest.fixture(autouse=True)
 def cv_pom_driver(testui_driver):
-    driver = TestUICVPOMDriver("best_g.pt", testui_driver, **{'ocr': {'paragraph': False}})
+    driver = TestUICVPOMDriver("yolov8n.pt", testui_driver, **{'ocr': {'paragraph': False}})
     yield driver
 
 class TestSuite:
@@ -160,7 +160,7 @@ from cv_pom.cv_pom_driver import CVPOMDriver
 
 @pytest.fixture(autouse=True)
 def cv_pom_driver():
-    driver = DesktopCVPOMDriver("best.pt", **{'ocr': {'paragraph': False, 'canvas_size': 1200}, "resize": 0.5})
+    driver = DesktopCVPOMDriver("yolov8n.pt", **{'ocr': {'paragraph': False, 'canvas_size': 1200}, "resize": 0.5})
     yield driver
 
 
@@ -217,12 +217,12 @@ See tests or `CVPOMDriver` implementation for examples of how to use the underly
 You can run a rest API server in order to use the framework remotely or to use it with other programming languages:
 
 ```bash
-python server.py --model test/resources/best_august.pt
+python server.py --model yolov8n.pt
 ```
 
 ### As CLI
 
 You can also inspect the elements in images by using the `main.py` script
 ```bash
-python main.py --model test/resources/best_august.pt --media test/resources/yolo_test_1.png
+python main.py --model yolov8n.pt --media test/resources/yolo_test_1.png
 ```
