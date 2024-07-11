@@ -207,9 +207,7 @@ class CVPOMDriverElement(POMElement):
             CVPOMDriverElement
         """
         if end_coords is None and delta is None:
-            logger.error(
-                f"action: drag_drop - either end_coords or delta must be specified - action not performed"
-            )
+            logger.error("action: drag_drop - either end_coords or delta must be specified - action not performed")
             return self
 
         if end_coords is None:
@@ -222,9 +220,7 @@ class CVPOMDriverElement(POMElement):
             x, y = self.center
             x_end, y_end = end_coords
 
-        logger.info(
-            f"action: drag_drop - start coords: {(x, y)} - end coords: {(x_end, y_end)}"
-        )
+        logger.info("action: drag_drop - start coords: {(x, y)} - end coords: {(x_end, y_end)}")
         self._driver._drag_drop(x, y, x_end, y_end, duration)
 
         return self
@@ -248,9 +244,7 @@ class CVPOMDriverElement(POMElement):
             CVPOMDriverElement
         """
         if start_coords is None and delta is None:
-            logger.error(
-                f"action: drag_drop - either start_coords or delta must be specified - action not performed"
-            )
+            logger.error("action: drag_drop - either start_coords or delta must be specified - action not performed")
             return self
 
         if start_coords is None:
@@ -264,9 +258,7 @@ class CVPOMDriverElement(POMElement):
             x_end, y_end = self.center
             x, y = start_coords
 
-        logger.info(
-            f"action: drag_drop - start coords: {(x, y)} - end coords: {(x_end, y_end)}"
-        )
+        logger.info(f"action: drag_drop - start coords: {(x, y)} - end coords: {(x_end, y_end)}")
         self._driver._drag_drop(x, y, x_end, y_end, duration)
 
         return self
