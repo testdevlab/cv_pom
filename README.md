@@ -165,7 +165,7 @@ def cv_pom_driver():
 
 
 class TestSuite:
-    def test_test_unicaja(self, cv_pom_driver: CVPOMDriver):
+    def test_test(self, cv_pom_driver: CVPOMDriver):
         page = cv_pom_driver.get_page()
         page.element({"text": {"value": "Project", "contains": True}}).drag_drop(delta=(500, 0))
 ```
