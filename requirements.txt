@@ -1,4 +1,5 @@
 pytest
+python-bidi==0.4.2
 yolo5
 opencv-python
 fastapi
