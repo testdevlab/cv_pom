@@ -22,6 +22,12 @@ class QueryValue:
 class Query:
     label: QueryValue | None = None
     text: QueryValue | None = None
+    parent: Query | None = None
+    child: Query | None = None
+    left: Query | None = None
+    right: Query | None = None
+    up: Query | None = None
+    down: Query | None = None
 
 
 @dataclass
@@ -166,9 +172,15 @@ class POM:
         if query_dict is None:
             return self.elements
 
-        filtered: list[POMElement] = []
-
         query = self._parse_query(query_dict)
+
+        return self._filter_query(query)
+
+    def to_json(self, indent=None) -> str:
+        return json.dumps([el.as_dict() for el in self.elements], indent=indent)
+
+    def _filter_query(self, query: Query) -> list[POMElement]:
+        filtered: list[POMElement] = []
 
         for element in self.elements:
             label = element.label
@@ -185,10 +197,55 @@ class POM:
 
             filtered.append(element)
 
-        return filtered
+        filtered_in: list[POMElement] = []
+        if query.child is not None:
+            filtered_child = self._filter_query(query.child)
+            for element in filtered:
+                for el in self._find_contained_rects(element, filtered_child):
+                    filtered_in.append(el)
+            filtered = filtered_in
 
-    def to_json(self, indent=None) -> str:
-        return json.dumps([el.as_dict() for el in self.elements], indent=indent)
+        filtered_in = []
+        if query.parent is not None:
+            filtered_parent = self._filter_query(query.parent)
+            for element in filtered_parent:
+                if len(self._find_contained_rects(element, filtered)) > 0:
+                    filtered_in.append(element)
+            filtered = filtered_in
+
+        filtered_in = []
+        if query.left is not None:
+            filtered_left = self._filter_query(query.left)
+            for element in filtered:
+                for el in self._find_rects_sides(element, filtered_left, "left"):
+                    filtered_in.append(el)
+            filtered = filtered_in
+
+        filtered_in = []
+        if query.right is not None:
+            filtered_right = self._filter_query(query.right)
+            for element in filtered:
+                for el in self._find_rects_sides(element, filtered_right, "right"):
+                    filtered_in.append(el)
+            filtered = filtered_in
+
+        filtered_in = []
+        if query.up is not None:
+            filtered_up = self._filter_query(query.up)
+            for element in filtered:
+                for el in self._find_rects_sides(element, filtered_up, "up"):
+                    filtered_in.append(el)
+            filtered = filtered_in
+
+        filtered_in = []
+        if query.down is not None:
+            filtered_down = self._filter_query(query.down)
+            for element in filtered:
+                for el in self._find_rects_sides(element, filtered_down, "down"):
+                    filtered_in.append(el)
+            filtered = filtered_in
+
+        return filtered
 
     def _check_query_value(self, value: str, query_val: QueryValue | None) -> bool:
         if query_val is None:
@@ -214,17 +271,22 @@ class POM:
         """
         query = Query()
         for [key, item] in query_dict.items():
-            if isinstance(item, dict):
-                if "value" not in item:
-                    raise Exception("Query object doesn't have 'value' field")
-                query_val = QueryValue(item["value"])
-                if "case_sensitive" in item:
-                    query_val.case_sensitive = bool(item["case_sensitive"])
-                if "contains" in item:
-                    query_val.contains = bool(item["contains"])
-                setattr(query, key, query_val)
+            if key == "label" or key == "text":
+                if isinstance(item, dict):
+                    if "value" not in item:
+                        raise Exception("Query object doesn't have 'value' field")
+                    query_val = QueryValue(item["value"])
+                    if "case_sensitive" in item:
+                        query_val.case_sensitive = bool(item["case_sensitive"])
+                    if "contains" in item:
+                        query_val.contains = bool(item["contains"])
+                    setattr(query, key, query_val)
+                else:
+                    setattr(query, key, QueryValue(item))
             else:
-                setattr(query, key, QueryValue(item))
+                if isinstance(item, dict):
+                    query_in = self._parse_query(item)
+                    setattr(query, key, query_in)
 
         return query
 
@@ -238,6 +300,66 @@ class POM:
                     rect1[0] > rect2[2] or  # rect1 is to the right of rect2
                     rect1[3] < rect2[1] or  # rect1 is above rect2
                     rect1[1] > rect2[3])
+
+    def _do_rect1_contain_rect2(self, rect1, rect2) -> bool:
+        """Check if rect1 contains within rect2
+        rect = [xmin, ymin, xmax, ymax]
+
+        returns bool
+        """
+        return (rect2[2] < rect1[2] and  # rect2 xmax is lower than rect1
+                rect2[0] > rect1[0] and  # rect2 xmin is bigger than rect1
+                rect2[3] < rect1[3] and  # rect2 ymax is lower than rect1
+                rect2[1] > rect1[1])
+
+    def _find_contained_rects(self, element_1: POMElement, elements: list[POMElement]) -> list[POMElement]:
+        """Example usage:
+        rect1 = [xmin, ymin, xmax, ymax]
+        list[POMElement]
+
+        returns list
+        """
+        rect1 = [element_1.coords_tl[0], element_1.coords_tl[1], element_1.coords_br[0], element_1.coords_br[1]]
+        contained_elements: list[POMElement] = []
+
+        for element in elements:
+            # Check for overlap in x-axis and y-axis
+            rect2 = [element.coords_tl[0], element.coords_tl[1], element.coords_br[0], element.coords_br[1]]
+            if self._do_rect1_contain_rect2(rect1, rect2):
+                # Rectangles overlap, add to the result
+                contained_elements.append(element)
+
+        return contained_elements
+
+    def _find_rects_sides(self, element_1: POMElement, elements: list[POMElement], side: str) -> list[POMElement]:
+        """Example usage:
+        POMElement - [xmin, ymin, xmax, ymax]
+        list[POMElement] - [xmin, ymin, xmax, ymax]
+        left/right/up/down
+
+        returns list
+        """
+        contained_elements: list[POMElement] = []
+
+        for element in elements:
+            if side == "right":
+                if (element.coords_tl[0] > element_1.coords_br[0]
+                        and element.coords_tl[1] < element_1.center[1] < element.coords_br[1]):
+                    contained_elements.append(element)
+            if side == "left":
+                if (element_1.coords_tl[0] > element.coords_br[0]
+                        and element.coords_tl[1] < element_1.center[1] < element.coords_br[1]):
+                    contained_elements.append(element)
+            if side == "up":
+                if (element_1.coords_tl[1] < element.coords_br[1]
+                        and element.coords_tl[0] < element_1.center[0] < element.coords_br[0]):
+                    contained_elements.append(element)
+            if side == "down":
+                if (element_1.coords_br[1] > element.coords_tl[1]
+                        and element.coords_tl[0] < element_1.center[0] < element.coords_br[0]):
+                    contained_elements.append(element)
+
+        return contained_elements
 
     def _find_overlapping_rects(self, rect1: list, sq_w_txt: list) -> list:
         """Example usage:
