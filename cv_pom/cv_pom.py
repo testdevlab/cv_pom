@@ -211,7 +211,7 @@ class POM:
             for element in filtered_parent:
                 if len(self._find_contained_rects(element, filtered)) > 0:
                     filtered_in.append(element)
-            filtered = filtered_in
+            filtered = list(dict.fromkeys(filtered_in))
 
         filtered_in = []
         if query.left is not None:
@@ -219,7 +219,7 @@ class POM:
             for element in filtered:
                 for el in self._find_rects_sides(element, filtered_left, "left"):
                     filtered_in.append(el)
-            filtered = filtered_in
+            filtered = list(dict.fromkeys(filtered_in))
 
         filtered_in = []
         if query.right is not None:
@@ -227,7 +227,7 @@ class POM:
             for element in filtered:
                 for el in self._find_rects_sides(element, filtered_right, "right"):
                     filtered_in.append(el)
-            filtered = filtered_in
+            filtered = list(dict.fromkeys(filtered_in))
 
         filtered_in = []
         if query.up is not None:
@@ -235,7 +235,7 @@ class POM:
             for element in filtered:
                 for el in self._find_rects_sides(element, filtered_up, "up"):
                     filtered_in.append(el)
-            filtered = filtered_in
+            filtered = list(dict.fromkeys(filtered_in))
 
         filtered_in = []
         if query.down is not None:
@@ -243,7 +243,7 @@ class POM:
             for element in filtered:
                 for el in self._find_rects_sides(element, filtered_down, "down"):
                     filtered_in.append(el)
-            filtered = filtered_in
+            filtered = list(dict.fromkeys(filtered_in))
 
         return filtered
 
