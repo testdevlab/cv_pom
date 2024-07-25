@@ -100,6 +100,161 @@ class TestCVPOMUtils(unittest.TestCase):
         result = self.pom._find_non_overlapping_rects(self.pom.elements, sq_w_txt)
         self.assertEqual(result_exp, result, f'expecting found: {result_exp}, got {result}')
 
+    def test_contain_rects(self):
+        element1 = POMElement(
+            id='',
+            attrs={'text': 'text1'},
+            bounding_rect=(1, 1, 100, 100),
+            center=(50, 50),
+            confidence=1.0,
+            coords_br=(100, 100),
+            coords_tl=(1, 1),
+            label='ocr_element',
+        )
+        elements = [POMElement(
+            id='',
+            attrs={'text': 'text1'},
+            bounding_rect=(2, 2, 4, 4),
+            center=(3, 3),
+            confidence=1.0,
+            coords_br=(4, 4),
+            coords_tl=(2, 2),
+            label='ocr_element',
+        ), POMElement(
+            id='',
+            attrs={'text': 'text1'},
+            bounding_rect=(101, 101, 200, 200),
+            center=(150, 150),
+            confidence=1.0,
+            coords_br=(200, 200),
+            coords_tl=(101, 101),
+            label='ocr_element',
+        )]
+        exp_result = [POMElement(
+            id='',
+            attrs={'text': 'text1'},
+            bounding_rect=(2, 2, 4, 4),
+            center=(3, 3),
+            confidence=1.0,
+            coords_br=(4, 4),
+            coords_tl=(2, 2),
+            label='ocr_element',
+        )]
+        elements_found = self.pom._find_contained_rects(element1, elements)
+        self.assertEqual(elements_found, exp_result,
+                         f'The squares {elements_found}, {exp_result} should contain, but did not'
+                         )
+
+    def test_side_rects(self):
+        element1 = POMElement(
+            id='',
+            attrs={'text': 'text1'},
+            bounding_rect=(50, 50, 60, 60),
+            center=(55, 55),
+            confidence=1.0,
+            coords_br=(60, 60),
+            coords_tl=(50, 50),
+            label='ocr_element',
+        )
+        elements = [POMElement(
+            id='',
+            attrs={'text': 'right'},
+            bounding_rect=(62, 50, 70, 60),
+            center=(66, 55),
+            confidence=1.0,
+            coords_br=(70, 60),
+            coords_tl=(62, 50),
+            label='ocr_element',
+        ), POMElement(
+            id='',
+            attrs={'text': 'left'},
+            bounding_rect=(40, 50, 48, 60),
+            center=(44, 55),
+            confidence=1.0,
+            coords_br=(48, 60),
+            coords_tl=(40, 50),
+            label='ocr_element',
+        ), POMElement(
+            id='',
+            attrs={'text': 'up'},
+            bounding_rect=(50, 70, 60, 80),
+            center=(55, 75),
+            confidence=1.0,
+            coords_br=(60, 80),
+            coords_tl=(50, 70),
+            label='ocr_element',
+        ), POMElement(
+            id='',
+            attrs={'text': 'down'},
+            bounding_rect=(50, 30, 60, 40),
+            center=(55, 45),
+            confidence=1.0,
+            coords_br=(60, 40),
+            coords_tl=(50, 30),
+            label='ocr_element',
+        )]
+        # Expected results
+        exp_result_l = [POMElement(
+            id='',
+            attrs={'text': 'left'},
+            bounding_rect=(40, 50, 48, 60),
+            center=(44, 55),
+            confidence=1.0,
+            coords_br=(48, 60),
+            coords_tl=(40, 50),
+            label='ocr_element',
+        )]
+        exp_result_r = [POMElement(
+            id='',
+            attrs={'text': 'right'},
+            bounding_rect=(62, 50, 70, 60),
+            center=(66, 55),
+            confidence=1.0,
+            coords_br=(70, 60),
+            coords_tl=(62, 50),
+            label='ocr_element',
+        )]
+        exp_result_u = [POMElement(
+            id='',
+            attrs={'text': 'up'},
+            bounding_rect=(50, 70, 60, 80),
+            center=(55, 75),
+            confidence=1.0,
+            coords_br=(60, 80),
+            coords_tl=(50, 70),
+            label='ocr_element',
+        )]
+        exp_result_d = [POMElement(
+            id='',
+            attrs={'text': 'down'},
+            bounding_rect=(50, 30, 60, 40),
+            center=(55, 45),
+            confidence=1.0,
+            coords_br=(60, 40),
+            coords_tl=(50, 30),
+            label='ocr_element',
+        )]
+        # ASSERT
+        elements_found = self.pom._find_rects_sides(element1, elements, "left")
+        self.assertEqual(elements_found, exp_result_l,
+                         f'The squares {elements_found}, {exp_result_l} should be in the left, but did not'
+                         )
+
+        elements_found = self.pom._find_rects_sides(element1, elements, "right")
+        self.assertEqual(elements_found, exp_result_r,
+                         f'The squares {elements_found}, {exp_result_r} should be in the left, but did not'
+                         )
+
+        elements_found = self.pom._find_rects_sides(element1, elements, "up")
+        self.assertEqual(elements_found, exp_result_u,
+                         f'The squares {elements_found}, {exp_result_u} should be in the left, but did not'
+                         )
+
+        elements_found = self.pom._find_rects_sides(element1, elements, "down")
+        self.assertEqual(elements_found, exp_result_d,
+                         f'The squares {elements_found}, {exp_result_d} should be in the left, but did not'
+                         )
+
 
 class TestCVPOMQuery(unittest.TestCase):
     def setUp(self) -> None:

@@ -12,6 +12,7 @@
    * [PyAutoGui Driver - Native Desktop App Automation](#pyautogui-driver---native-desktop-app-automation)
  * [CV POM Usage](#cvpom-usage)
    * [Python API](#python-api)
+   * [Python API: Element search query](#python-api-element-search-query)
    * [REST API Server](#rest-api-server)
    * [As CLI](#as-cli)
 
@@ -202,15 +203,20 @@ cv2.waitKey(1000)
 ```
 
 
-        - select by exact label:                {"label": "my-label"}
-        - select by label containing substring: {"label": {"value: "my-label", "contains": True}}
-        - select by label not case sensitive:   {"label": {"value: "my-label", "case_sensitive": False}}
-        - select by exact text:                 {"text": "my-text"}
-        - select by exact label and text:       {"label": "my-label", "text": "my-text"}
-
-
 See tests or `CVPOMDriver` implementation for examples of how to use the underlying CVPOM class.
 
+
+### Python API: Element search query
+
+
+      select by exact label:                           {"label": "my-label"}
+      select by label containing substring:            {"label": {"value: "my-label", "contains": True}}
+      select by label not case sensitive:              {"label": {"value: "my-label", "case_sensitive": False}}
+      select by exact text:                            {"text": "my-text"}
+      select by exact label and text:                  {"label": "my-label", "text": "my-text"}
+      search by child element:                         {"label": "my-label": "child": {"text": "my-text"}}
+      search by parent element:                        {"label": "my-label". "text": "my-text": "parent": {"text": "my text"}}
+      search by element on the left/right/up/down:     {"text": "my text": "left/right/up/down": {"text": "my text2"}}
 
 ### REST API Server
 
