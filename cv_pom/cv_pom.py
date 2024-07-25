@@ -44,6 +44,19 @@ class POMElement:
     def as_dict(self):
         return dataclasses.asdict(self)
 
+    def __eq__(self, other):
+        if not isinstance(other, POMElement):
+            return False
+        return (self.id == other.id and self.label == other.label and
+                self.coords_tl == other.coords_tl and self.coords_br == other.coords_br and
+                self.center == other.center and self.bounding_rect == other.bounding_rect and
+                self.confidence == other.confidence and self.attrs == other.attrs)
+
+    def __hash__(self):
+        return hash((self.id, self.label, self.coords_tl, self.coords_br,
+                     self.center, self.bounding_rect, self.confidence,
+                     frozenset(self.attrs.items())))
+
 
 class POM:
     """CV POM (Page Object Model) class.
