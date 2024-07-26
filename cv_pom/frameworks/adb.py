@@ -29,10 +29,10 @@ class AdbCVPOMDriver(CVPOMDriver):
     def _send_keys(self, keys: str):
         sp.run(f"adb {self.__udid}shell input text \"{keys}\"", shell=True)
 
-    def _drag_drop(self, x: int, y: int, x_end: int, y_end: int, duration=0.1):
+    def _drag_drop(self, x: int, y: int, x_end: int, y_end: int, duration=0.1, button="PRIMARY"):
         sp.run(f"adb {self.__udid}shell input touchscreen swipe {x} {y} {x_end} {y_end}", shell=True)
 
-    def _hover_coordinates(self, keys: str):
+    def _hover_coordinates(self, x: int, y: int):
         print("doesn't exist for ADB driver")
 
     def _swipe_coordinates(self, coords: tuple = None, direction: str = None):

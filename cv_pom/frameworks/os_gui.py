@@ -53,7 +53,7 @@ class DesktopCVPOMDriver(CVPOMDriver):
     def _hover_coordinates(self, x: int, y: int):
         pyautogui.moveTo(x, y)
 
-    def _drag_drop(self, x: int, y: int, x_end: int, y_end: int, duration=0.1):
-        pyautogui.mouseDown(x, y)
+    def _drag_drop(self, x: int, y: int, x_end: int, y_end: int, duration=0.1, button="PRIMARY"):
+        pyautogui.mouseDown(x, y, button=button)
         pyautogui.moveTo(x, y, duration=duration)
         pyautogui.mouseUp(x_end, y_end)
