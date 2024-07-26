@@ -106,19 +106,19 @@ class TestUICVPOMDriver(CVPOMDriver):
         actions.w3c_actions.pointer_action.move_to_location(x=x, y=y)
         actions.perform()
 
-    def _drag_drop(self, x: int, y: int, x_end: int, y_end: int, duration=0.1):
+    def _drag_drop(self, x: int, y: int, x_end: int, y_end: int, duration=0.1, button="PRIMARY"):
         driver = self._driver.get_driver  # Deprecated property 1.2.1 python-testui
         if inspect.ismethod(self._driver.get_driver):
             driver = self._driver.get_driver()
         self._driver.actions().w3c_actions = ActionBuilder(
             driver,
-            mouse=PointerInput(interaction.POINTER_TOUCH, "touch"),
-            duration=duration
+            mouse=PointerInput(interaction.POINTER_TOUCH, "touch")
         )
 
         actions = self._driver.actions()
         actions.w3c_actions.pointer_action.move_to_location(x=x, y=y)
         actions.w3c_actions.pointer_action.pointer_down()
+        actions.w3c_actions.pointer_action.pause(duration)
         actions.w3c_actions.pointer_action.move_to_location(x=x_end, y=y_end)
         actions.w3c_actions.pointer_action.release()
         actions.perform()

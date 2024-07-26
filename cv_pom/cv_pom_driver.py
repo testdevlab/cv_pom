@@ -220,7 +220,7 @@ class CVPOMDriverElement(POMElement):
             x, y = self.center
             x_end, y_end = end_coords
 
-        logger.info("action: drag_drop - start coords: {(x, y)} - end coords: {(x_end, y_end)}")
+        logger.info(f"action: drag_drop - start coords: {(x, y)} - end coords: {(x_end, y_end)}")
         self._driver._drag_drop(x, y, x_end, y_end, duration)
 
         return self
@@ -260,6 +260,37 @@ class CVPOMDriverElement(POMElement):
 
         logger.info(f"action: drag_drop - start coords: {(x, y)} - end coords: {(x_end, y_end)}")
         self._driver._drag_drop(x, y, x_end, y_end, duration)
+
+        return self
+
+    def press(self,
+              coords: Optional[Tuple[int, int]] = None, duration=0.1, timeout=10, offset=(0, 0), button="PRIMARY"
+              ) -> CVPOMDriverElement:
+        """Drag and Drop from an element to coordinates or a delta distance in pixels.
+
+        Will wait for element to be visible.
+
+        Args:
+            offset: Offset from the coordinates of the element (AX, AY)
+            coords: coordinates to click (optional)
+            offset: distance in pixels from the element (optional)
+            duration: duration for the action to take place
+            timeout: Max wait time in seconds. Defaults to 10.
+            button: button to use for clicking
+        Returns:
+            CVPOMDriverElement
+        """
+
+        if coords is None:
+            self.wait_visible(timeout=timeout)
+            x, y = self.center
+        else:
+            x, y = coords
+
+        ax, ay = offset
+        x, y = x + ax, y + ay
+        logger.info(f"action: press - coords: {(x, y)} - duration - {duration}")
+        self._driver._drag_drop(x, y, x, y, duration, button)
 
         return self
 
@@ -399,5 +430,5 @@ class CVPOMDriver(ABC):
         pass
 
     @abstractmethod
-    def _drag_drop(self, x: int, y: int, x_end: int, y_end: int, duration=0.1):
+    def _drag_drop(self, x: int, y: int, x_end: int, y_end: int, duration=0.1, button="PRIMARY"):
         pass
