@@ -422,7 +422,7 @@ class CVPOMDriver(ABC):
         pass
 
     @abstractmethod
-    def _swipe_coordinates(self, coords: tuple = None, direction: str = None, duration=0.1):
+    def _swipe_coordinates(self, coords: tuple = None, direction: str = None, duration: float = 0.1):
         pass
 
     @abstractmethod
