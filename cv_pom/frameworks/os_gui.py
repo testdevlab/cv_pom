@@ -22,7 +22,7 @@ class DesktopCVPOMDriver(CVPOMDriver):
         """
         super().__init__(model_path, **kwargs)
         self.resize = 1
-        if kwargs["resize"]:
+        if kwargs and "resize" in kwargs:
             self.resize = kwargs["resize"]
 
     def _get_screenshot(self) -> np.ndarray:
@@ -38,7 +38,9 @@ class DesktopCVPOMDriver(CVPOMDriver):
     def _send_keys(self, keys: str):
         pyautogui.write(keys)
 
-    def _swipe_coordinates(self, coords: tuple = None, direction: str = None):
+    def _swipe_coordinates(self, coords: tuple = None, direction: str = None, duration=None):
+        # duration var doesn't have an effect in this driver
+
         if coords:
             print("Coordinates scroll not supported")
         if direction == 'up':
