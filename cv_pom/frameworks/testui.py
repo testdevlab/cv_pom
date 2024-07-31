@@ -72,7 +72,7 @@ class TestUICVPOMDriver(CVPOMDriver):
     def _send_keys(self, keys: str):
         self._driver.actions().send_keys(keys).perform()
 
-    def _swipe_coordinates(self, coords: tuple = None, direction: str = None, duration=0.2):
+    def _swipe_coordinates(self, coords: tuple = None, direction: str = None, duration: float = 0.2):
         actions = self._driver.actions()
 
         if coords is not None:
