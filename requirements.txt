@@ -1,6 +1,6 @@
 pytest
 python-bidi==0.4.2
-opencv-python~=4.8.1
+opencv-python~=4.10.0.84
 fastapi~=0.110.0
 pydantic~=2.6.4
 uvicorn~=0.29.0
