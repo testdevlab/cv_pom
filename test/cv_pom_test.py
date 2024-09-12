@@ -1,4 +1,5 @@
 import base64
+import os
 from pathlib import Path
 import unittest
 import json
@@ -8,11 +9,13 @@ from server import app
 from cv_pom.cv_pom import POM, POMElement
 
 
+test_dir = os.path.dirname(__file__)
+
 class TestCVPOMConvert(unittest.TestCase):
 
     def setUp(self) -> None:
         self.pom = POM("yolov8n.pt")
-        self.image_path = "test/resources/yolo_test_1.png"
+        self.image_path = os.path.join(test_dir, "resources", "yolo_test_1.png")
 
     def test_image_path_to_pom(self):
         self.pom.convert_to_cvpom(self.image_path, {'paragraph': False})
@@ -55,7 +58,7 @@ class TestCVPOMUtils(unittest.TestCase):
     def setUp(self) -> None:
         self.pom = POM("yolov8n.pt")
         # Artificially create elements
-        self.pom.elements = create_elements("test/resources/pom_example.json")
+        self.pom.elements = create_elements(os.path.join(test_dir, "resources", "pom_example.json"))
 
     def test_overlap_rects(self):
         # TRUE
@@ -260,7 +263,7 @@ class TestCVPOMQuery(unittest.TestCase):
     def setUp(self) -> None:
         self.pom = POM("yolov8n.pt")
         # Artificially create elements
-        self.pom.elements = create_elements("test/resources/pom_example.json")
+        self.pom.elements = create_elements(os.path.join(test_dir, "resources", "pom_example.json"))
 
     def test_query_by_label(self):
         elements = self.pom.get_elements({"label": "text-btn"})
@@ -321,7 +324,7 @@ class TestCVPOMServer(unittest.TestCase):
         app.cv_pom = POM("yolov8n.pt")
         client = TestClient(app)
 
-        image = cv.imread("test/resources/yolo_test_1.png")
+        image = cv.imread(os.path.join(test_dir, "resources", "yolo_test_1.png"))
         _, base64_image = cv.imencode(".png", image)
         data = base64.b64encode(base64_image).decode()
 

@@ -16,7 +16,6 @@ classifiers = [
   "Programming Language :: Python :: 3",
 ]
 dependencies = [
-  "pytesseract",
   "yolo5",
   "opencv-python",
   "fastapi",
