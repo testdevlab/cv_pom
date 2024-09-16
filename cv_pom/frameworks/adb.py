@@ -35,7 +35,9 @@ class AdbCVPOMDriver(CVPOMDriver):
     def _hover_coordinates(self, x: int, y: int):
         print("doesn't exist for ADB driver")
 
-    def _swipe_coordinates(self, coords: tuple = None, direction: str = None):
+    def _swipe_coordinates(self, coords: tuple = None, direction: str = None, duration=None):
+        # duration var doesn't have an effect in this driver
+
         if coords is not None:
             x, y, x_end, y_end = coords
         else:
