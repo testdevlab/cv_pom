@@ -28,7 +28,7 @@ class DesktopCVPOMDriver(CVPOMDriver):
     def _get_screenshot(self) -> np.ndarray:
         screenshot = pyautogui.screenshot()
         width, height = screenshot.size
-        screenshot = screenshot.resize((width // 2, height // 2), Image.LANCZOS)
+        screenshot = screenshot.resize((round(width*self.resize), round(height*self.resize)), Image.LANCZOS)
         pimg = np.array(screenshot)
         return cv.cvtColor(np.array(pimg), cv.COLOR_RGB2BGR)
 
