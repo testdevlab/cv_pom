@@ -8,3 +8,4 @@ easyocr==1.7.2
 ultralytics~=8.1.29
 httpx
 ruff
+pyserial
