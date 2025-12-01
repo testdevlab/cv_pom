@@ -1,8 +1,10 @@
 import cv2 as cv
 import numpy as np
+import math
 import os
 import re
 import serial
+import pygame
 import time
 
 from importlib import reload
@@ -11,11 +13,32 @@ from cv_pom.cv_pom_driver import CVPOMDriver
 
 from config.printer_config import dimensions, SERIAL_PORT, BAUD_RATE 
 # dimensions have the values of the printer bed size in mm
+'''Example:
+dimensions = {
+    "default":{
+        "x": 460, # In mm
+        "y": 460 
+    },
+}
+'''
 # SERIAL_PORT is the connection of your device to the printer, and can be found with 'ls /dev/tty.*' terminal command
 # BAUD_RATE is set to 115200
 
 import config.device_params as device_params_module
 # Mobile device dimensions 
+'''Example:
+device_params = {
+    "default": {
+        'width': 1080,
+        'height': 2640,
+        'physical_width': 38.0,
+        'physical_height': 102.0,
+        'center_x': 0.0,
+        'center_y': 0.0
+    }
+}
+'''
+
 
 class PrinterCVPOMDriver(CVPOMDriver):
     def __init__(self, model_path: str | Path, appium_driver, device: str, printer: str, orientation: str, **kwargs) -> None:
@@ -35,8 +58,7 @@ class PrinterCVPOMDriver(CVPOMDriver):
         if(self._device["center_x"] != 0.0):
             self._printer_center_x = self._device["center_x"]
             self._printer_center_y = self._device["center_y"] 
-        
-        
+     
     def _load_configs(self, device: str, printer: str):
          # Get device configuration
         if device not in device_params_module.device_params:
@@ -99,18 +121,22 @@ class PrinterCVPOMDriver(CVPOMDriver):
         
         return img
 
-    def _hover_coordinates(self, x: int, y: int):
+    def _hover_coordinates(self, x: int, y: int, wait_idle: bool = True):
         dx, dy = self._screen_to_printer(x, y)
         self.send_gcode(f"G1 X{dx:.2f} Y{dy:.2f} F3000") # Move to position
+        if wait_idle:
+            self.wait_until_idle()
     
-    def _click_coordinates(self, x: int, y: int, times=1, interval=0, button="PRIMARY"):
+    def _click_coordinates(self, x: int, y: int, times=1, interval=0, button="PRIMARY", wait_idle: bool = True):
         dx, dy = self._screen_to_printer(x, y)
         self.send_gcode(f"G1 X{dx:.2f} Y{dy:.2f}") # Move to position
-        self.send_gcode("G1 Z2 F6000") # Go down
+        self.send_gcode("G1 Z0 F6000") # Go down
         self.send_gcode("G1 Z10 F6000") # Go back up
         print("Tap!")
+        if wait_idle:
+            self.wait_until_idle()
 
-    def _swipe_coordinates(self, coords: tuple = None, direction: str = None, duration: float = 0.1):
+    def _swipe_coordinates(self, coords: tuple = None, direction: str = None, duration: float = 0.1, wait_idle: bool = True):
         distance = 30 # How far to swipe
         self.send_gcode(f"G1 X{self._printer_center_x} Y{self._printer_center_y}") # Move to center position
         self.send_gcode("G1 Z2 F6000") # Go down
@@ -135,8 +161,11 @@ class PrinterCVPOMDriver(CVPOMDriver):
             
         self.send_gcode("G1 Z10 F6000") # Go back up
         print(f"Swipe {direction}!")
+        
+        if wait_idle:
+            self.wait_until_idle()
 
-    def _drag_drop(self, x: int, y: int, x_end: int, y_end: int, duration=0.1, button="PRIMARY"):
+    def _drag_drop(self, x: int, y: int, x_end: int, y_end: int, duration=0.1, button="PRIMARY", wait_idle: bool = True):
         dx, dy = self._screen_to_printer(x, y)
         ex, ey = self._screen_to_printer(x_end, y_end)
         self.send_gcode(f"G1 X{dx:.2f} Y{dy:.2f}") # Move to starting position
@@ -144,13 +173,15 @@ class PrinterCVPOMDriver(CVPOMDriver):
         self.send_gcode(f"G1 X{ex:.2f} Y{ey:.2f}") # Move to the target position
         self.send_gcode("G1 Z10") # Go back up
         print(f"Drag and Drop!")
+        if wait_idle:
+            self.wait_until_idle()
     
     # Not implemented
     def _send_keys(self, keys: str):
         raise NotImplementedError("Keyboard input functionality is not implemented.")
     
     
-    ### --------------- Public methods ---------------
+    ### ------------------------------------------- Public methods -------------------------------------------
     
     # Get the current X,Y,Z position of the printer
     def get_position(self):
@@ -213,3 +244,212 @@ class PrinterCVPOMDriver(CVPOMDriver):
         if self._ser is not None:
             self._ser.close()
         print("Serial connection closed.")
+        
+    def update_appium_driver(self, appium_driver):
+        self._driver = appium_driver
+        
+    # Call to make the program wait until the printer has completed all commands
+    def wait_until_idle(self, timeout_s: float = 60.0) -> bool:
+
+        ser = self._ser
+
+        # Remove any old data serial data
+        old_timeout = ser.timeout
+        ser.timeout = 0.1
+        while True:
+            data = ser.readline()
+            if not data:
+                break
+
+        # Wait until all moves are done
+        self.send_gcode("M400")
+
+        deadline = time.time() + timeout_s
+        ser.timeout = 0.5
+
+        while time.time() < deadline:
+            line = ser.readline().decode(errors="ignore").strip().lower()
+            if not line:
+                continue
+            if line.startswith("busy"):
+                continue
+            if line == "ok":
+                # Final OK after M400 means motion queue is empty
+                ser.timeout = old_timeout
+                # Returns a bool if more complex logic is needed during implementation
+                return True
+
+        # Timeout
+        ser.timeout = old_timeout
+        
+        # Returns a bool if more complex logic is needed during implementation
+        return False
+        
+        
+  # ------------------------------------------- MANUAL CALIBRATION -------------------------------------------
+    
+    
+    def manual_calibration(self):
+        self._init_pygame()
+        self.send_gcode("G1 Z10")  # lift head a bit
+
+        # Reset saved positions at the start of calibration
+        open("custom_position.txt", "w").close()
+        clock = pygame.time.Clock()
+        last_position = None
+
+        corner_labels = ["Top Left", "Top Right", "Bottom Right", "Bottom Left"]
+        coords = {} 
+        idx = 0
+        print(f"Select {corner_labels[idx]} corner, then left-click.")
+
+        running = True
+        while running:
+            clock.tick(60)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+                elif event.type == pygame.MOUSEMOTION:
+                    x, y = event.pos
+                    if (last_position is None) or (x, y) != last_position:
+                        last_position = (x, y)
+                        window_height = self._printer_center_y * 2
+                        x, y = event.pos
+                        y = window_height - y  # Inverts Y-axis when translating pygame window to printer. Remove this to undo the inversion
+                        self._mouse_to_gcode(x, y)
+
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    # tap down/up
+                    self.send_gcode("G1 Z5 F3000")
+                    self.send_gcode("G1 Z10 F3000")
+
+                    x, y, _ = self.get_position()
+                    print(f"[{corner_labels[idx]}] Current position: X={x:.2f}, Y={y:.2f}")
+
+                    choice = input(f"Save this coordinate for {corner_labels[idx]}? (y/n): ").strip().lower()
+                    if choice in ("y", "yes"):
+                        label_key = corner_labels[idx].lower()
+                        coords[label_key] = (x, y)
+                        print("Coordinate saved.")
+
+                        idx += 1
+                        if idx >= 4:
+                            print("All four corners saved. Exiting manual calibration.")
+                            
+                            # Ask for device name, default to "custom"
+                            device_name = input('Device name to save (default "custom"): ').strip()
+                            if not device_name:
+                                device_name = "custom"
+
+                            print(f"Saving calibration as '{device_name}'...")
+                            self._add_custom_device_to_params(coords=coords, device_name=device_name)
+                            print("Exiting manual calibration.")
+                            
+                            running = False
+                        else:
+                            print(f"Select {corner_labels[idx]} corner, then left-click.")
+                    else:
+                        print("Coordinate not saved. Try again for the same corner.")
+    
+    def _init_pygame(self, title: str = "Manual Control"):
+        width = self._printer_center_x*2
+        height = self._printer_center_y*2
+        pygame.init()
+        screen = pygame.display.set_mode((width, height))
+        pygame.display.set_caption(title)
+        clock = pygame.time.Clock()
+        return screen, clock
+
+    def _get_mouse_position(self):
+        return pygame.mouse.get_pos()
+
+
+    def _mouse_to_gcode(self, x: int, y: int):
+        
+        # Creating new attributes to avoid sending every movement to the printer, only the last
+        if not hasattr(self, "_last_move_time"):
+            self._last_move_time = 0.0
+            self._last_move_pos = None
+
+        debounce_s = 0.15  # How many seconds to wait between sending last command to printer
+        now = time.monotonic()
+
+        # If not enough time passed since last method call, skip this one 
+        if now - self._last_move_time < debounce_s:
+            self._last_move_pos = (x, y)
+            return
+
+        # If we had a pending position from previous rapid moves, use that instead
+        if self._last_move_pos is not None:
+            x, y = self._last_move_pos
+            self._last_move_pos = None
+
+        self._last_move_time = now
+
+        gcode = f"G1 X{x} Y{y} F10000"
+        self.send_gcode(gcode)
+
+    def _add_custom_device_to_params(self, coords: dict, device_name: str = "custom", params_path="config/device_params.py"):
+        
+        required = ["top left", "top right", "bottom right", "bottom left"]
+        if any(label not in coords for label in required):
+            raise ValueError(
+                "Expected coordinates for Top Left, Top Right, Bottom Right, Bottom Left"
+            )
+
+        tl, tr, br, bl = (
+            coords["top left"],
+            coords["top right"],
+            coords["bottom right"],
+            coords["bottom left"],
+        )
+
+        # Compute dimensions
+        width = math.dist(tl, tr)
+        height = math.dist(tl, bl)
+
+        # Compute physical center
+        cx = (tl[0] + tr[0] + bl[0] + br[0]) / 4.0
+        cy = (tl[1] + tr[1] + bl[1] + br[1]) / 4.0
+
+        
+        size = self._driver.get_window_size()
+        screen_width = size["width"]
+        screen_height = size["height"]
+
+        entry = f"""
+        '{device_name}': {{
+            'width': {screen_width},
+            'height': {screen_height},
+            'physical_width': {width:.2f},
+            'physical_height': {height:.2f},
+            'center_x': {cx:.2f},
+            'center_y': {cy:.2f}
+        }},
+        """
+
+        # Update or append to device_params.py
+        if not os.path.exists(params_path):
+            with open(params_path, "w", encoding="utf-8") as f:
+                f.write("device_params = {" + entry + "\n}\n")
+            print(f"Created {params_path} and added '{device_name}' entry.")
+            return
+
+        with open(params_path, "r+", encoding="utf-8") as f:
+            content = f.read()
+            
+            pattern = rf"'{re.escape(device_name)}':\s*\{{[^}}]+\}},"
+            if f"'{device_name}':" in content:
+                print(f"Updating existing '{device_name}' entry...")
+                content = re.sub(pattern, entry.strip(), content)
+            else:
+                # Append before closing
+                content = re.sub(r"\}\s*$", entry + "\n}", content)
+                
+            f.seek(0)
+            f.write(content)
+            f.truncate()
+
+        print(f"Device '{device_name}' has been added/updated with width={width:.2f} mm, height={height:.2f} mm, center=({cx:.2f}, {cy:.2f})")
