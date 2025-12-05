@@ -5,7 +5,7 @@ fastapi~=0.110.0
 pydantic~=2.6.4
 uvicorn~=0.29.0
 easyocr==1.7.2
-ultralytics~=8.1.29
+ultralytics~=8.3.235
 httpx
 ruff
 
