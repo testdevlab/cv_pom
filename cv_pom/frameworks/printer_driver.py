@@ -6,38 +6,33 @@ import re
 import serial
 import pygame
 import time
+import config.device_params as device_params_module
+# Mobile device dimensions example:
+#   device_params = {
+#        "default": {
+#            'width': 1080,
+#            'height': 2640,
+#           'physical_width': 38.0,
+#           'physical_height': 102.0,
+#           'center_x': 0.0,
+#           'center_y': 0.0
+#        }
+#   }
 
+from cv_pom.cv_pom_driver import CVPOMDriver
 from importlib import reload
 from pathlib import Path
-from cv_pom.cv_pom_driver import CVPOMDriver
-
 from config.printer_config import dimensions, SERIAL_PORT, BAUD_RATE 
-# dimensions have the values of the printer bed size in mm
-'''Example:
-dimensions = {
-    "default":{
-        "x": 460, # In mm
-        "y": 460 
-    },
-}
-'''
 # SERIAL_PORT is the connection of your device to the printer, and can be found with 'ls /dev/tty.*' terminal command
 # BAUD_RATE is set to 115200
-
-import config.device_params as device_params_module
-# Mobile device dimensions 
-'''Example:
-device_params = {
-    "default": {
-        'width': 1080,
-        'height': 2640,
-        'physical_width': 38.0,
-        'physical_height': 102.0,
-        'center_x': 0.0,
-        'center_y': 0.0
-    }
-}
-'''
+# dimensions have the values of the printer bed size in mm
+#   Example:
+#   dimensions = {
+#       "default":{
+#           "x": 460, # In mm
+#           "y": 460 
+#       },
+#   }
 
 
 class PrinterCVPOMDriver(CVPOMDriver):
@@ -142,22 +137,21 @@ class PrinterCVPOMDriver(CVPOMDriver):
         self.send_gcode("G1 Z2 F6000") # Go down
         
         # Swipe in the correct direction
-        match direction:
-            case "up":
-                swipe = self._printer["y"]/2 + distance
-                self.send_gcode(f"G1 Y{swipe} F6000")
-            case "down":
-                swipe = self._printer["y"]/2 - distance
-                self.send_gcode(f"G1 Y{swipe} F6000")
-            case "left":
-                swipe = self._printer["x"]/2 - distance
-                self.send_gcode(f"G1 X{swipe} F6000")
-            case "right":
-                swipe = self._printer["x"]/2 + distance
-                self.send_gcode(f"G1 X{swipe} F6000")
-            case _:
-                print(f"Invalid direction: {direction}")
-                return
+        if direction == "up":
+            swipe = self._printer["y"] / 2 + distance
+            self.send_gcode(f"G1 Y{swipe} F6000")
+        elif direction == "down":
+            swipe = self._printer["y"] / 2 - distance
+            self.send_gcode(f"G1 Y{swipe} F6000")
+        elif direction == "left":
+            swipe = self._printer["x"] / 2 - distance
+            self.send_gcode(f"G1 X{swipe} F6000")
+        elif direction == "right":
+            swipe = self._printer["x"] / 2 + distance
+            self.send_gcode(f"G1 X{swipe} F6000")
+        else:
+            print(f"Invalid direction: {direction}")
+            return
             
         self.send_gcode("G1 Z10 F6000") # Go back up
         print(f"Swipe {direction}!")
@@ -172,7 +166,7 @@ class PrinterCVPOMDriver(CVPOMDriver):
         self.send_gcode("G1 Z2") # Go down
         self.send_gcode(f"G1 X{ex:.2f} Y{ey:.2f}") # Move to the target position
         self.send_gcode("G1 Z10") # Go back up
-        print(f"Drag and Drop!")
+        print("Drag and Drop!")
         if wait_idle:
             self.wait_until_idle()
     
