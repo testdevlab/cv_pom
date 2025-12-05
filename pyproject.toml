@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cv_pom"
-version = "0.2.2"
+version = "0.2.3"
 authors = [
   { name = "Álvaro Santos Laserna López", email = "alvaro.laserna@testdevlab.com" },
   { name = "Arnis Gustins", email = "arnis.gustins@testdevlab.com" },
